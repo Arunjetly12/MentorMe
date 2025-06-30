@@ -45,8 +45,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     // 2. Function to add a single task to the database
     async function addTask(text) {
         if (!text) return;
-        
-        const { error } = await supabase.from('tasks').insert([{ text: text }]);
+        // --- ADD THESE 3 LINES ---
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        alert("You must be logged in to add a task.");
+        return; // Stop if no one is logged in
+    }
+        const { error } = await supabase.from('tasks').insert([{ text: text, user_id: user.id }]);
         
         if (error) {
             console.error("Error adding task:", error);
