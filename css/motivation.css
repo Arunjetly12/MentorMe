@@ -1,0 +1,74 @@
+/* ======================== */
+/*  MOTIVATION PAGE STYLES  */
+/* ======================== */
+.motivation-card {
+    min-height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+#quote-display {
+    font-size: 20px;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+#author-display {
+    font-size: 16px;
+    font-weight: 600;
+    color: #555;
+    text-align: right;
+}
+
+#new-quote-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #ffc107; /* A vibrant, happy yellow */
+    color: #333;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+/* Wrap h1 + icon in a flex row */
+.heading-with-icon {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+/* Icon size and color */
+.heading-with-icon [data-lucide] {
+    width: 22px;
+    height: 22px;
+    color: #FFCC00;
+}
+
+/* =============================== */
+/*      Lucide Icon Adjustments    */
+/* =============================== */
+
+.bottom-nav .nav-link span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+    margin-bottom: 4px;
+}
+
+.bottom-nav .nav-link span svg {
+    width: 22px;
+    height: 22px;
+    stroke: #555; /* Default icon color */
+    stroke-width: 2;
+}
+
+.bottom-nav .nav-link.active span svg {
+    stroke: #007bff; /* Highlight active link icon */
+}

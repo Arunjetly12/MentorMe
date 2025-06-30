@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - MentorMe NEET</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Your file with the URL and Key -->
+    <script src="js/supabase-client.js"></script>
+    
+    <!-- 3. **NEW** The Security Guard Script -->
+    
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- NEW Stylesheet for the index page -->
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+    <!-- Main welcome content -->
+    <div class="welcome-container" id="welcome-content">
+        <img src="https://res.cloudinary.com/dcm7c486w/image/upload/v1751108094/logo-Photoroom_rkpc4g.png" alt="MentorMe Logo" class="welcome-logo">
+        <h1 class="welcome-subtitle">Your personal guide to success.</h1>
+        
+        <!-- This button will be controlled by JS -->
+        <button id="start-btn" class="welcome-btn">Start Your Session</button>
+    </div>
+
+    <!-- The Loading Animation Overlay (hidden by default) -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <p class="loading-text">Preparing your dashboard...</p>
+    </div>
+
+
+    <!-- ✅ NEW JAVASCRIPT FILE -->
+    <script src="js/index.js"></script>
+</body>
+</html>

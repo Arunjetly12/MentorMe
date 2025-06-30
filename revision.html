@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Revision Planner - MentorMe </title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Your file with the URL and Key -->
+    <script src="js/supabase-client.js"></script>
+    
+    <!-- 3. **NEW** The Security Guard Script -->
+    <script src="js/guard.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
+    <script src="https://unpkg.com/lucide@latest"></script>
+     <!-- TO THIS (just changed the filename): -->
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css"> <!-- Main Styles (for nav) -->
+    <link rel="stylesheet" href="css/revision.css"> <!-- Revision Page Specific Styles -->
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="header">
+            <h1>Revision Planner <span class="icon-wrapper"><span data-lucide="brain-circuit"></span></span></h1>
+            <p>Master your topics with spaced repetition.</p>
+        </header>
+        
+        <!-- SECTION 1: ADD NEW TOPIC -->
+        <section class="card add-topic-card">
+            <h2>Add a Topic</h2>
+            <form id="add-topic-form">
+                <input type="text" id="topic-name" placeholder="Enter Topic Name (e.g., Photosynthesis)" required>
+                <select id="subject-select" required>
+                    <option value="" disabled selected>Select Subject</option>
+                    <option value="Physics">Physics</option>
+                    <option value="Chemistry">Chemistry</option>
+                    <option value="Biology">Biology</option>
+                </select>
+                <select id="confidence-level" required>
+                    <option value="" disabled selected>How well do you know it?</option>
+                    <option value="weak">🤯 Weak</option>
+                    <option value="ok">🤔 Okay</option>
+                    <option value="strong">😎 Strong</option>
+                </select>
+
+                <!-- Manual Scheduling Section -->
+                <!-- REPLACE WITH THIS CODE -->
+               <div class="toggle-container">
+                    <span>Set date manually?</span>
+                    <label class="toggle-switch">
+                    <input type="checkbox" id="manual-schedule-checkbox">
+                    <span class="slider"></span>
+              </label>
+                    </div>
+                <input type="date" id="manual-date-input" class="hidden">
+                
+                <button type="submit" class="btn primary">Add to Planner</button>
+            </form>
+        </section>
+
+        <!-- SECTION 2: TODAY'S REVISIONS -->
+        <section class="card">
+            <h2><span data-lucide="zap"></span> Due Today</h2>
+            <div id="todays-revision-list" class="revision-list">
+                <!-- JS will populate this -->
+            </div>
+        </section>
+
+        <!-- SECTION 3: UPCOMING & ALL TOPICS -->
+        <section class="card">
+            <h2><span data-lucide="calendar-clock"></span> All Scheduled Topics</h2>
+            <div id="all-topics-list" class="revision-list">
+                <!-- JS will populate this -->
+            </div>
+        </section>
+
+    </div>
+
+    <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-link">
+        <span data-lucide="home"></span>
+    </a>
+    <a href="tracker.html" class="nav-link">
+        <span data-lucide="bar-chart"></span>
+    </a>
+    <a href="reminders.html" class="nav-link">
+        <span data-lucide="bell"></span>
+    </a>
+    <a href="motivation.html" class="nav-link">
+        <span data-lucide="activity"></span>
+    </a>
+    <a href="revision.html" class="nav-link active">
+        <span data-lucide="brain-circuit"></span>
+    </a>
+    <a href="tools.html" class="nav-link">
+        <span data-lucide="settings"></span>
+    </a>
+</nav>
+
+    
+
+    <script src="js/revision.js"></script>
+</body>
+</html>

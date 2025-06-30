@@ -1,0 +1,154 @@
+/* ======================== */
+/*  NEW WELCOME PAGE STYLES */
+/* ======================== */
+
+body {
+    background-color: #1a1a2e;
+    color: #f0f0f0;
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    overflow: hidden; /* Prevents scrollbars */
+}
+
+.welcome-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    transition: opacity 0.5s ease-out;
+}
+
+
+.welcome-logo {
+    max-width: 350px; /* <--- MADE IT BIGGER (from 280px) */
+    width: 85%;
+    height: auto;
+    margin-bottom: 20px;
+    /* Apply the animation we will create below */
+    animation: floatAnimation 4s ease-in-out infinite; 
+}
+
+.welcome-subtitle {
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: #a3b3ff;
+    margin-top: 0;
+    margin-bottom: 40px;
+}
+
+.welcome-btn {
+    padding: 15px 40px;
+    background: linear-gradient(90deg, #8e44ad, #B13BFF);
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(177, 59, 255, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.welcome-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(177, 59, 255, 0.4);
+}
+
+
+/* ======================== */
+/*  LOADING ANIMATION       */
+/* ======================== */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #1a1a2e;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in, visibility 0.5s;
+    z-index: 1000;
+}
+
+.loading-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.loading-text {
+    margin-top: 20px;
+    color: #a3b3ff;
+    font-size: 1rem;
+}
+
+/* The DNA Loader */
+.loader {
+    --dot-size: 15px;
+    --loader-width: 100px;
+    position: relative;
+    width: var(--loader-width);
+    height: var(--loader-width);
+    transform-style: preserve-3d;
+    animation: rotate-loader 6s infinite linear;
+}
+
+@keyframes rotate-loader {
+    from { transform: rotateY(0deg) rotateX(20deg); }
+    to { transform: rotateY(360deg) rotateX(20deg); }
+}
+
+.dot {
+    width: var(--dot-size);
+    height: var(--dot-size);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: calc(var(--dot-size) / -2);
+    margin-left: calc(var(--dot-size) / -2);
+}
+
+.dot:nth-child(1) { background: #FFCC00; animation: dot-path-1 6s infinite ease-in-out; }
+.dot:nth-child(2) { background: #B13BFF; animation: dot-path-2 6s infinite ease-in-out; }
+.dot:nth-child(3) { background: #FFCC00; animation: dot-path-3 6s infinite ease-in-out; }
+.dot:nth-child(4) { background: #B13BFF; animation: dot-path-4 6s infinite ease-in-out; }
+.dot:nth-child(5) { background: #FFCC00; animation: dot-path-5 6s infinite ease-in-out; }
+
+
+@keyframes dot-path-1 { 0%, 100% { transform: rotateY(0deg)   translateZ(calc(var(--loader-width)/2)); } 50% { transform: rotateY(180deg) translateZ(calc(var(--loader-width)/2)); } }
+@keyframes dot-path-2 { 0%, 100% { transform: rotateY(-72deg)  translateZ(calc(var(--loader-width)/2)); } 50% { transform: rotateY(108deg) translateZ(calc(var(--loader-width)/2)); } }
+@keyframes dot-path-3 { 0%, 100% { transform: rotateY(-144deg) translateZ(calc(var(--loader-width)/2)); } 50% { transform: rotateY(36deg)  translateZ(calc(var(--loader-width)/2)); } }
+@keyframes dot-path-4 { 0%, 100% { transform: rotateY(-216deg) translateZ(calc(var(--loader-width)/2)); } 50% { transform: rotateY(-36deg) translateZ(calc(var(--loader-width)/2)); } }
+@keyframes dot-path-5 { 0%, 100% { transform: rotateY(-288deg) translateZ(calc(var(--loader-width)/2)); } 50% { transform: rotateY(-108deg)translateZ(calc(var(--loader-width)/2)); } }
+
+/* ADD THIS NEW CODE AT THE BOTTOM OF THE FILE */
+
+/* ======================== */
+/*  LOGO FLOAT ANIMATION    */
+/* ======================== */
+@keyframes floatAnimation {
+  /* Start and end state of the animation */
+  0%, 100% {
+    transform: translateY(0);
+    /* A subtle shadow that gives a 'grounded' look */
+    filter: drop-shadow(0 5px 15px rgba(177, 59, 255, 0.2));
+  }
+  
+  /* The middle state of the animation (the 'up' float) */
+  50% {
+    transform: translateY(-15px); /* Moves the logo up by 15px */
+    /* The shadow gets bigger and softer, making it look higher */
+    filter: drop-shadow(0 25px 25px rgba(177, 59, 255, 0.4));
+  }
+}

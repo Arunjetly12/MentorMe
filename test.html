@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Supabase Connection Test</title>
+</head>
+<body>
+    <h1>Supabase Connection Test</h1>
+    <p>Check the developer console (F12) to see if tasks are loaded.</p>
+    <p>If you see your tasks logged in the console, the connection is working!</p>
+
+    <!-- THESE THREE SCRIPTS ARE CRUCIAL. THEY MUST BE IN THIS ORDER. -->
+    
+    <!-- 1. The Official Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Your file with the URL and Key -->
+    <script src="js/supabase-client.js"></script>
+    
+    <!-- 3. Our new test script -->
+    <script src="js/test.js"></script>
+</body>
+</html>

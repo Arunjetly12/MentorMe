@@ -1,0 +1,253 @@
+/* ======================== */
+/*  REVISION PAGE STYLES  */
+/* ======================== */
+
+/* Inherit global styles */
+body {
+    background-color: #1a1a2e;
+    color: #f0f0f0;
+    font-family: 'Poppins', sans-serif;
+}
+
+.app-container {
+    padding: 15px 15px 100px 15px; /* Padding for content + bottom nav */
+}
+
+.header {
+    color: #FFFFFF;
+    padding: 10px 0;
+    margin-bottom: 15px;
+}
+.header h1 {
+    font-size: 24px; margin: 0; display: flex; align-items: center; gap: 8px;
+}
+.header .icon-wrapper {
+    display: flex; width: 24px; height: 24px; color: #FFCC00;
+}
+.header p {
+    font-size: 16px; margin-top: 8px; color: #a3b3ff;
+}
+
+/* Card Styling - matches your theme */
+.card {
+    background-color: #B13BFF; /* Darker card */
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card h2 {
+    color: #FFCC00;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.card h2 .lucide {
+    width: 22px;
+    height: 22px;
+}
+
+/* Form Styling */
+#add-topic-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* REPLACE WITH THIS UPGRADED CODE BLOCK */
+
+#add-topic-form input,
+#add-topic-form select {
+    width: 100%;
+    padding: 12px 15px; /* Adjusted padding for the arrow */
+    background-color: rgba(133, 17, 201, 0.842);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+
+    /* === THIS IS THE MAGIC PART === */
+    /* Remove default browser appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    /* Add our custom arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23cccccc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 1em;
+}
+#add-topic-form input::placeholder { color: #888; }
+#add-topic-form select { appearance: none; } /* For custom dropdown arrow later if needed */
+
+.manual-schedule-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ccc;
+    cursor: pointer;
+}
+#manual-date-input.hidden { display: none; }
+
+/* Button Styling */
+.btn.primary {
+    background: linear-gradient(90deg, #16011e, #6200cd);
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: transform 0.2s ease;
+}
+.btn.primary:hover { transform: scale(1.02); }
+
+/* Revision List Styling */
+.revision-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.revision-item {
+    background-color: #1e1e2f;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 5px solid; /* Confidence color */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.revision-item-info h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+}
+.revision-item-info p {
+    margin: 0;
+    font-size: 14px;
+    color: #aaa;
+}
+.revision-item-info .subject {
+    font-weight: 600;
+}
+
+.revision-item-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+}
+.action-btn:hover { color: white; }
+.complete-btn:hover { color: #27ae60; }
+.delete-btn:hover { color: #e74c3c; }
+
+/* Confidence colors for the border */
+.confidence-strong { border-color: #27ae60; } /* Green */
+.confidence-ok { border-color: #f39c12; } /* Orange */
+.confidence-weak { border-color: #e74c3c; } /* Red */
+
+/* Color subjects for better visual grouping */
+.subject-Physics { color: #5dade2; } /* Blue */
+.subject-Chemistry { color: #af7ac5; } /* Purple */
+.subject-Biology { color: #58d68d; } /* Green */
+
+.empty-message {
+    color: #888;
+    text-align: center;
+    padding: 20px;
+}
+
+/* Make sure Lucide icons in nav are visible */
+.bottom-nav .nav-link.active span svg {
+    stroke: #FFCC00; /* Gold for active link */
+}
+/* ======================== */
+/*   MODERN TOGGLE SWITCH   */
+/* ======================== */
+
+/* The main container for the text and the switch */
+.toggle-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.toggle-container span {
+    color: #ccc;
+    font-weight: 500;
+}
+
+/* The switch - the box around the slider */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;  /* Width of the switch */
+    height: 28px; /* Height of the switch */
+}
+
+/* Hide the default HTML checkbox */
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider / track */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #4a4a68; /* 'Off' color */
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+/* The moving nub */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px; /* Height of the nub */
+    width: 20px;  /* Width of the nub */
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+/* --- The "ON" State --- */
+input:checked + .slider {
+    background-color: #B13BFF; /* 'On' color - matches your theme */
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(22px);
+    -ms-transform: translateX(22px);
+    transform: translateX(22px); /* Moves the nub to the right */
+}

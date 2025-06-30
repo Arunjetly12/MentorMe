@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reminders - MentorMe </title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Your file with the URL and Key -->
+    <script src="js/supabase-client.js"></script>
+    
+    <!-- 3. **NEW** The Security Guard Script -->
+    <script src="js/guard.js"></script>
+    <link rel="stylesheet" href="css/reminders.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- TO THIS (just changed the filename): -->
+  
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+    <h1>
+        Set a Reminder
+        <span data-lucide="bell"></span>
+    </h1>
+    <p>Never miss a study session.</p>
+</header>
+
+
+
+        <div class="card">
+            <h2>New Reminder</h2>
+            <input type="text" id="reminder-text" placeholder="What should I remind you about?">
+            <input type="time" id="reminder-time">
+            <button id="set-reminder-btn">Set Reminder</button>
+        </div>
+
+        <div class="card">
+            <h2>Upcoming Reminders</h2>
+            <ul id="reminders-list">
+                <!-- Reminders will be listed here -->
+            </ul>
+        </div>
+    </div>
+      <!-- **NEW** THE REMINDER ALERT MODAL -->
+    <div id="reminder-alert-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="alert-header">🔔 Reminder! 🔔</h2>
+            <p id="alert-text">This is where the reminder message will go.</p>
+            <div class="modal-actions">
+                <button id="alert-ok-btn">Got it!</button>
+            </div>
+        </div>
+    </div>
+
+   <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-link active">
+        <span data-lucide="home"></span>
+        
+    </a>
+    <a href="tracker.html" class="nav-link">
+        <span data-lucide="bar-chart"></span>
+        
+    </a>
+    <a href="reminders.html" class="nav-link active">
+        <span data-lucide="bell"></span>
+        
+    </a>
+    <a href="motivation.html" class="nav-link active">
+        <span data-lucide="activity"></span>
+        
+    </a>
+    
+    <a href="revision.html" class="nav-link active">
+         <span data-lucide="brain-circuit"></span>
+
+     </a> <!-- Added link -->
+
+     <a href="tools.html" class="nav-link">
+         <span data-lucide="settings"></span>
+          
+     </a>
+
+</nav>
+    
+    <script src="js/reminders.js"></script>
+</body>
+</html>

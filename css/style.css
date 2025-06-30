@@ -1,0 +1,103 @@
+/* Basic reset and font setting */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #090040; /* A light grey background */
+    color: #f0f0f0;
+}
+
+/* The main container that looks like a phone screen */
+.app-container {
+    max-width: 450px; /* Limits width on desktop */
+    margin: 0 auto;   /* Centers it on the page */
+    padding: 20px;
+}
+
+/* Header style */
+.header h1 {
+    font-size: 24px;
+    font-weight: 600;
+}
+.header p {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* The style for our "cards" */
+.card {
+    background-color: #B13BFF;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.card h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* ======================== */
+/*    NAVIGATION STYLES     */
+/* ======================== */
+/* This targets the <nav class="bottom-nav"> element */
+.bottom-nav {
+    position: fixed;   /* This is the magic part: it unsticks the element from the page flow and fixes it to the viewport (the screen). */
+    bottom: 0;
+    border-radius: 10px;         /* This tells it to stick 0 pixels from the bottom of the screen. */
+    left: 0;           /* This tells it to stick 0 pixels from the left of the screen. */
+    width: 100%;       /* This makes it stretch across the full width of the screen. */
+    background-color: #471396; /* Gives it a white background. */
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow on top to make it pop. */
+    display: flex;     /* Turns it into a flex container to easily arrange the links. */
+    justify-content: space-around; /* This distributes the links evenly with space around them. */
+}
+
+/* This targets the <a class="nav-link"> elements inside the nav bar */
+.nav-link {
+    color: #ffe09d;          /* Sets the default color to a light grey. */
+    text-decoration: none; /* Removes the ugly default underline from links. */
+    text-align: center;
+    margin: 10px;    /* Centers the text and icon. */
+}
+
+/* This targets ONLY the link that ALSO has the "active" class */
+.nav-link.active {
+    color: #6f00ff;       /* Changes the color to blue to show which page is currently active. */
+}
+
+/* This targets the <span> elements (our emojis) inside the links */
+.nav-link span {
+    display: block;        /* Makes the icon take up its own line, pushing the text below it. */
+    font-size: 20px;       /* Makes the emoji icon a bit bigger. */
+}
+/* =============================== */
+/*      Lucide Icon Adjustments    */
+/* =============================== */
+
+.bottom-nav .nav-link span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+    margin-bottom: 4px;
+}
+
+.bottom-nav .nav-link span svg {
+    width: 22px;
+    height: 22px;
+    stroke: #555; /* Default icon color */
+    stroke-width: 2;
+}
+
+.bottom-nav .nav-link.active span svg {
+    stroke: #007bff; /* Highlight active link icon */
+}

@@ -1,0 +1,135 @@
+/* ======================== */
+/*   DASHBOARD PAGE STYLES  */
+/* ======================== */
+
+.task-list {
+    list-style: none;
+    padding: 0;
+}
+
+.task-item {
+    padding: 15px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    transition: background-color 0.3s, opacity 0.3s;
+}
+
+.task-item:last-child {
+    border-bottom: none;
+}
+
+/* --- Task States --- */
+.task-item.done .task-text {
+    text-decoration: line-through;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.task-list:has(.task-item.timing) .task-item:not(.timing) {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+.task-item.timing {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+
+/* --- Task Elements --- */
+.task-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 10px; /* Add some space below the title/actions */
+}
+.task-text {
+    flex-grow: 1;
+    font-size: 18px; /* Slightly larger title */
+}
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-left: 10px;
+}
+
+/* Custom Checkbox */
+.task-checkbox {
+    width: 22px; height: 22px; border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 5px; cursor: pointer; display: flex; justify-content: center; align-items: center;
+}
+.task-item.done .task-checkbox {
+    background-color: #28a745; border-color: #28a745;
+}
+
+/* Timer Play/Pause Button */
+.timer-btn {
+    background: none; border: none; color: #FFCC00; cursor: pointer; padding: 0; display: flex;
+}
+.timer-btn .lucide {
+    width: 24px; height: 24px;
+}
+
+
+/* --- NEW: TIMER SETUP VIEW --- */
+.timer-setup-container {
+    display: none; /* Hidden by default */
+    width: 100%;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    align-items: center;
+    gap: 10px;
+}
+.task-item.setting-up .timer-setup-container { display: flex; }
+
+/* --- THE FIX --- */
+/* Hide only the actions, not the whole title content */
+.task-item.setting-up .task-actions,
+.task-item.timing .task-actions {
+    display: none; /* CHANGED */
+}
+
+.timer-setup-container input {
+    width: 60px;
+    padding: 8px;
+    font-size: 16px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+}
+.timer-setup-container .unit {
+    color: rgba(255, 255, 255, 0.8);
+}
+.timer-setup-container .setup-actions {
+    margin-left: auto;
+}
+
+/* Generic button style */
+.btn {
+    background-color: rgba(255, 255, 255, 0.1); color: white; border: none;
+    padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;
+}
+.btn.primary { background-color: #28a745; }
+.btn.secondary { background-color: #e74c3c; }
+
+
+/* --- COUNTDOWN TIMER VIEW --- */
+.timer-countdown-container {
+    display: none;
+    width: 100%;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    justify-content: space-between; align-items: center;
+}
+.task-item.timing .timer-countdown-container { display: flex; }
+
+.timer-display { font-size: 24px; font-weight: 600; color: #FFCC00; }
+
+
+/* --- Your original styles for Header, FAB, Modal, Nav (no changes) --- */
+.fab{position:fixed;bottom:80px;right:30px;width:60px;height:60px;background-color:#8400ff;color:white;border:none;border-radius:50%;font-size:30px;box-shadow:0 4px 8px rgba(0,0,0,0.2);cursor:pointer;display:flex;justify-content:center;align-items:center}.header{color:#FFFFFF;padding:10px}.header h1{font-size:24px;margin:0;display:flex;align-items:center;gap:8px}.icon-wrapper{display:flex;width:24px;height:24px;color:#FFCC00}.header p{font-size:16px;margin-top:8px}.card{background-color:#B13BFF;padding:20px;border-radius:10px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.2)}.card h2{color:#FFCC00;margin-bottom:10px}.card p{color:#ffffff;font-style:italic}.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}.modal-overlay.show{opacity:1;visibility:visible}.modal-content{background-color:rgba(50,0,131,.877);padding:25px;border-radius:12px;width:90%;max-width:400px;box-shadow:0 5px 15px rgba(0,0,0,0.2)}.modal-content h2{margin-top:0;margin-bottom:20px;color:#FFCC00}#task-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:16px;margin-bottom:20px}.modal-actions{display:flex;justify-content:flex-end;gap:10px}.modal-actions button{padding:10px 20px;border:none;border-radius:8px;font-size:16px;cursor:pointer;font-weight:600}#add-btn{background-color:#B13BFF;color:white}#cancel-btn{background-color:#f0f2f5;color:#333}.bottom-nav .nav-link span{display:flex;justify-content:center;align-items:center;height:24px;margin-bottom:4px}.bottom-nav .nav-link span svg{width:22px;height:22px;stroke:#d1c5a2;stroke-width:2}.bottom-nav .nav-link.active span svg{stroke:#007bff}

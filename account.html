@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - NEET Mentor</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/account.css">
+    <!-- Other links... -->
+</head>
+<body>
+    <div class="app-container">
+        <header class="header">
+            <h1>My Account</h1>
+        </header>
+        
+        <div class="card profile-card">
+            <div class="profile-header">
+                <img id="profile-avatar" src="assets/images/default-avatar.png" alt="User Avatar">
+                <h2 id="user-email">Loading...</h2>
+            </div>
+            <button id="logout-btn">Logout</button>
+        </div>
+        
+        <!-- More settings can be added here later -->
+
+    </div>
+
+    <!-- Navigation Bar -->
+    <!-- Add this to ALL your HTML files -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-link">
+            <span data-lucide="home"></span>
+        </a>
+        </nav>
+    <!-- Supabase Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/account.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide-icons/dist/lucide.min.js"></script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

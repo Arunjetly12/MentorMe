@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Study Tools - MentorMe </title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Your file with the URL and Key -->
+    <script src="js/supabase-client.js"></script>
+    
+    <!-- 3. **NEW** The Security Guard Script -->
+    <script src="js/guard.js"></script>
+    <link rel="stylesheet" href="css/tools.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- TO THIS (just changed the filename): -->
+         <link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+       <header class="header">
+    <div class="heading-with-icon">
+        <h1>Study Toolkit</h1>
+        <span data-lucide="settings"></span>
+    </div>
+    <p>Your suite of tools for focused learning.</p>
+</header>
+
+
+        <!-- ===================================== -->
+        <!--   FEATURE 1: THE POMODORO TIMER       -->
+        <!-- THIS IS THE PART THAT SHOULD BE WORKING -->
+        <!-- ===================================== -->
+        <div class="card pomodoro-card">
+            <h2 id="pomodoro-title">Pomodoro: Focus Time</h2>
+            <p id="pomodoro-time">25:00</p>
+            <div class="pomodoro-controls">
+                <button id="start-btn">Start</button>
+                <button id="pause-btn">Pause</button>
+                <button id="reset-btn">Reset</button>
+            </div>
+        </div>
+
+        <!-- Feature 2: Scheduled Voice Reminder (Correct Version) -->
+<div class="card">
+    <h2>Scheduled Voice Reminder</h2>
+    <input type="text" id="scheduled-voice-text" placeholder="e.g., Time to solve MCQs">
+    <div class="scheduled-voice-controls">
+        <span>Remind me in:</span>
+        <select id="scheduled-voice-time">
+            <option value="1">1 minute</option>
+            <option value="5">5 minutes</option>
+            <option value="15">15 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="45">45 minutes</option>
+            <option value="60">60 minutes</option>
+        </select>
+    </div>
+    <button id="set-voice-reminder-btn">Set Voice Reminder ⏰</button>
+</div>
+        <!-- ===================================== -->
+        <!--   FEATURE 3 & 4: OTHER TOOLS          -->
+        <!-- THIS IS THE OTHER PLACEHOLDER         -->
+        <!-- ===================================== -->
+        <!-- Feature 3 & 4: Focus Tools (Now Functional!) -->
+<div class="card">
+    <h2>Focus Tools</h2>
+
+    <!-- Sub-feature: Stopwatch -->
+    <div class="mini-tool">
+        <h3>Stopwatch</h3>
+        <p class="tool-display" id="stopwatch-display">00:00:00</p>
+        <div class="tool-controls">
+            <button id="sw-start">Start</button>
+            <button id="sw-stop">Stop</button>
+            <button id="sw-reset">Reset</button>
+        </div>
+    </div>
+
+    <hr> <!-- A line to separate the tools -->
+
+    <!-- Sub-feature: Countdown Timer -->
+    <div class="mini-tool">
+        <h3>Countdown</h3>
+        <input type="number" id="countdown-input" placeholder="Minutes" min="1">
+        <p class="tool-display" id="countdown-display">00:00</p>
+        <div class="tool-controls">
+            <button id="cd-start">Start</button>
+            <button id="cd-stop">Stop</button>
+            <button id="cd-reset">Reset</button>
+        </div>
+    </div>
+    
+    <hr> <!-- A line to separate the tools -->
+
+    <!-- Sub-feature: Focus Reminder -->
+    <div class="mini-tool">
+        <h3>Focus Reminder</h3>
+        <p class="tool-description">Get a voice reminder to stay focused every 10 minutes.</p>
+        <button id="focus-toggle">Turn On</button>
+    </div>
+</div>
+
+    <!-- Navigation Bar -->
+    <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-link active">
+        <span data-lucide="home"></span>
+        
+    </a>
+    <a href="tracker.html" class="nav-link">
+        <span data-lucide="bar-chart"></span>
+        
+    </a>
+    <a href="reminders.html" class="nav-link active">
+        <span data-lucide="bell"></span>
+        
+    </a>
+    <a href="motivation.html" class="nav-link active">
+        <span data-lucide="activity"></span>
+        
+    </a>
+    
+    <a href="revision.html" class="nav-link active">
+         <span data-lucide="brain-circuit"></span>
+
+     </a> <!-- Added link -->
+
+     <a href="tools.html" class="nav-link">
+         <span data-lucide="settings"></span>
+          
+     </a>
+
+</nav>
+
+    <script src="js/tools.js"></script>
+</body>
+</html>

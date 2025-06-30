@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account - NEET Mentor</title>
+    <!-- Use a generic CSS file for auth pages -->
+    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="stylesheet" href="css/auth.css">
+    <!-- Fonts, etc. -->
+</head>
+<body>
+    <div class="auth-container">
+        <h1 id="form-title">Login</h1>
+        <p id="form-subtitle">Welcome back! Please enter your details.</p>
+
+        <!-- Main Form -->
+        <form id="auth-form">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" id="submit-btn">Login</button>
+        </form>
+
+
+        <div class="separator">or</div>
+
+        <!-- Google Sign-In Button -->
+        <button id="google-signin-btn">
+            <img src="assets/images/google-icon.png" alt="Google icon">
+            Continue with Google
+        </button>
+        
+        <p class="toggle-form">
+            <span id="toggle-text">Don't have an account?</span>
+            <a href="#" id="toggle-link">Sign Up</a>
+        </p>
+    </div>
+    
+
+    <!-- Supabase Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

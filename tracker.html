@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Tracker - MentorMe </title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- 2. Your file with the URL and Key -->
+    <script src="js/supabase-client.js"></script>
+    
+    <!-- 3. **NEW** The Security Guard Script -->
+    <script src="js/guard.js"></script>
+    <link rel="stylesheet" href="css/style.css"> 
+    <link rel="stylesheet" href="css/tracker.css"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+   <link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
+
+    <!-- REPLACE WITH THIS: -->
+    <!-- IMPORTANT: Add the Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="header">
+            <h1>
+                Your Progress Tracker 
+                <span class="icon-right" data-lucide="bar-chart"></span>
+            </h1>
+            <p>A detailed view of your hard work.</p>
+        </header>
+
+        <!-- Time Frame Filters -->
+        <div class="time-filters">
+            <button class="filter-btn" data-filter="daily">Daily</button>
+            <button class="filter-btn active" data-filter="weekly">Weekly</button>
+            <button class="filter-btn" data-filter="monthly">Monthly</button>
+        </div>
+
+        <!-- At-a-Glance Stats Card -->
+        <div class="card">
+            <h2>At-a-Glance</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-value" id="total-study-time">--</span>
+                    <span class="stat-label">Hours Studied</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="tasks-completed">--</span>
+                    <span class="stat-label">Tasks Done</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="mocks-taken">--</span>
+                    <span class="stat-label">Mocks Taken</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- NEET Mock Test Card -->
+        <div class="card">
+            <h2>NEET Mock Test Performance</h2>
+            <canvas id="mock-test-chart"></canvas>
+            <div class="mock-stats">
+                <div class="mock-stat-item">Avg Score: <span id="avg-score">--</span></div>
+                <div class="mock-stat-item">Highest Score: <span id="highest-score">--</span></div>
+            </div>
+            <button class="btn-primary" id="add-mock-btn">Add Mock Test Result</button>
+        </div>
+
+        <!-- Study Habit Card -->
+        <div class="card">
+            <h2>Study Habits</h2>
+            <canvas id="subject-study-chart"></canvas>
+        </div>
+
+    </div>
+
+    <!-- The Add Mock Test Modal (Pop-up) -->
+    <div id="add-mock-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Add Mock Test Result</h2>
+            <div class="form-group">
+                <label for="mock-date">Test Date</label>
+                <input type="date" id="mock-date">
+            </div>
+            <div class="form-group">
+                <label for="physics-score">Physics Score</label>
+                <input type="number" id="physics-score" placeholder="e.g., 120">
+            </div>
+            <div class="form-group">
+                <label for="chemistry-score">Chemistry Score</label>
+                <input type="number" id="chemistry-score" placeholder="e.g., 130">
+            </div>
+            <div class="form-group">
+                <label for="biology-score">Biology Score</label>
+                <input type="number" id="biology-score" placeholder="e.g., 300">
+            </div>
+            <div class="modal-actions">
+                <button id="cancel-mock-btn">Cancel</button>
+                <button id="save-mock-btn">Save Result</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- YOUR ORIGINAL NAV BAR - UNCHANGED -->
+    <nav class="bottom-nav">
+    <a href="dashboard.html" class="nav-link active">
+        <span data-lucide="home"></span>
+        
+    </a>
+    <a href="tracker.html" class="nav-link">
+        <span data-lucide="bar-chart"></span>
+        
+    </a>
+    <a href="reminders.html" class="nav-link active">
+        <span data-lucide="bell"></span>
+        
+    </a>
+    <a href="motivation.html" class="nav-link active">
+        <span data-lucide="activity"></span>
+        
+    </a>
+    
+    <a href="revision.html" class="nav-link active">
+         <span data-lucide="brain-circuit"></span>
+
+     </a> <!-- Added link -->
+
+     <a href="tools.html" class="nav-link">
+         <span data-lucide="settings"></span>
+          
+     </a>
+
+</nav>
+    
+    <script src="js/tracker.js"></script> 
+</body>
+</html>
