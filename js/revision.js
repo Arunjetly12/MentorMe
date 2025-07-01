@@ -16,12 +16,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- DATA ---
     let topics = [];
 
-    // --- SUPABASE FUNCTIONS (The Data Engine) ---
+       // --- SUPABASE FUNCTIONS (The Data Engine) ---
 
+    // LOAD: Gets all topics for ONLY the logged-in user
     async function loadTopics() {
+        // --- ADDED ---
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            console.log("No user is logged in. Can't load revision topics.");
+            topics = []; // Clear local array if no user
+            renderTopics(); // Render the empty state
+            return;
+        }
+        // -------------
+
         const { data, error } = await supabase
             .from('revision_topics')
             .select('*')
+            // --- ADDED ---
+            .eq('user_id', user.id) // The filter for user-specific data
+            // -------------
             .order('nextRevisionDate', { ascending: true });
 
         if (error) {
@@ -32,8 +46,25 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // ADD: Inserts a new topic and "tags" it with the user's ID
     async function addTopic(newTopicObject) {
-        const { error } = await supabase.from('revision_topics').insert([newTopicObject]);
+        // --- ADDED ---
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            alert("You must be logged in to add a topic.");
+            return;
+        }
+        // -------------
+
+        // --- MODIFIED ---
+        // Add the user's ID to the object right before saving it
+        const topicToInsert = {
+            ...newTopicObject,
+            user_id: user.id
+        };
+        // ----------------
+
+        const { error } = await supabase.from('revision_topics').insert([topicToInsert]);
         if (error) {
             console.error("Error adding topic:", error);
             alert("Failed to add topic. Check the console for errors.");
@@ -42,6 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // UPDATE: Finds a topic by its ID and updates it (no changes needed)
     async function updateTopic(topicId, updatesObject) {
         if (isNaN(topicId)) {
             console.error("Update failed: Invalid Topic ID.");
@@ -55,6 +87,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // DELETE: Finds a topic by its ID and removes it (no changes needed)
     async function deleteTopic(topicId) {
         if (isNaN(topicId)) {
             console.error("Delete failed: Invalid Topic ID.");
