@@ -8,7 +8,8 @@
     
     <!-- 2. Your file with the URL and Key -->
     <script src="js/supabase-client.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/lucide-icons/dist/lucide.min.js"></script>
+
     <!-- 3. **NEW** The Security Guard Script -->
     <script src="js/guard.js"></script>
     <link rel="stylesheet" href="css/style.css">
@@ -53,16 +54,20 @@
      
 </nav>
 
-
     <div class="app-container">
         <header class="header">
             <div class="header-top">
-                <h1>Hi, Student! <span class="icon-wrapper"><span data-lucide="hand"></span></span></h1>
+                <h1 id="welcome-greeting">
+    Hi, <span id="user-name">Student</span>! 
+    <span data-lucide="hand"></span>
+</h1>
             </div>
             <p>Ready to conquer your goals today?</p>
-            <a href="account.html" class="account-icon-btn">
-        <span data-lucide="user-circle-2"></span>
-    </a>
+            <div class="profile-section">
+        <a href="account.html" class="account-icon-btn">
+            <span data-lucide="user-circle-2"></span>
+        </a>
+    </div>
         </header>
 
         <div class="card quote-card">

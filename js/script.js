@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const cancelButton = document.querySelector('#cancel-btn');
     const addButton = document.querySelector('#add-btn');
     const taskInput = document.querySelector('#task-input');
+    const welcomeGreeting = document.getElementById('welcome-greeting');
 
     let tasks = []; // Start with an empty array. It will be filled from the database.
     let timerInterval = null;
@@ -19,27 +20,58 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // --- SUPABASE FUNCTIONS (The New Data Engine) ---
 
-    // 1. Function to load all tasks from the database
+        // 1. Function to load all tasks from the database and greet the user
     async function loadTasks() {
+        // First, get the current user. This is essential for everything that follows.
+        const { data: { user } } = await supabase.auth.getUser();
+
+        // If no user is logged in, stop the function immediately.
+        if (!user) {
+            console.log("No user logged in. Can't load tasks.");
+            return;
+        }
+
+        // --- NEW GREETING LOGIC ---
+        // Get the h1 element for the greeting.
+        const welcomeGreeting = document.getElementById('welcome-greeting');
+        if (welcomeGreeting) { // Check if the element exists
+            // Try to get the full name from Google metadata first.
+            let displayName = user.user_metadata?.full_name;
+
+            // If there's no full name (e.g., email/password signup), use the email.
+            if (!displayName) {
+                displayName = user.email.split('@')[0]; // Gets the part before the @
+            }
+            
+            // Capitalize the first letter for a nice look.
+            const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+
+            // Update the h1 tag's text content.
+            welcomeGreeting.textContent = `Hi, ${formattedName}! 👋`;
+        }
+        // --- END OF GREETING LOGIC ---
+
+        // Now, fetch only the tasks that belong to this user.
         const { data, error } = await supabase
             .from('tasks')
             .select('*')
+            .eq('user_id', user.id) // The filter for user-specific data
             .order('created_at', { ascending: true });
 
         if (error) {
             console.error("Error loading tasks:", error);
-            return; // Stop if there's an error
+            return; // Stop if there's a database error
         }
 
-        // Map the database data to include the temporary UI state properties your code needs
+        // Map the database data to include the temporary UI state properties
         tasks = data.map(dbTask => ({
-            ...dbTask, // id, created_at, text, completed
+            ...dbTask,
             isSettingUp: false,
             isTiming: false,
             remainingTime: 0,
         }));
         
-        renderTasks(); // Now, render the tasks to the screen
+        renderTasks(); // Render the user's tasks to the screen
     }
 
     // 2. Function to add a single task to the database
@@ -89,7 +121,27 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     // --- YOUR ORIGINAL UI AND TIMER FUNCTIONS ---
+   // Add this new function somewhere with your other UI functions
+// In js/script.js
 
+function updateWelcomeMessage(user) {
+    if (!user) return;
+
+    // **NEW** Select the specific span for the name
+    const userNameElement = document.getElementById('user-name');
+    if (!userNameElement) return; // Safety check
+
+    let displayName = user.user_metadata?.full_name;
+
+    if (!displayName) {
+        displayName = user.email.split('@')[0];
+    }
+
+    const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+
+    // **CHANGED** We now only update the text of the name span
+    userNameElement.textContent = formattedName;
+}
     function formatTime(seconds) {
         const minutes = Math.floor(seconds / 60);
         const secs = seconds % 60;
@@ -246,4 +298,6 @@ addButton.addEventListener('click', handleAddTask);
             link.classList.add("active");
         }
     });
+     lucide.createIcons();
 });
+ 

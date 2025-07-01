@@ -131,3 +131,20 @@ body {
     width: 30px;
     height: 30px;
 }
+/* Style for the user's name */
+#user-name-display-corner {
+    font-size: 16px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    
+    /* Animation setup */
+    opacity: 0; /* Start invisible */
+    transform: translateY(-5px); /* Start slightly moved up */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* The "loaded" state for the animation */
+#user-name-display-corner.loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
