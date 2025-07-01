@@ -19,19 +19,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // --- **NEW** SUPABASE FUNCTIONS ---
 
-    // 1. Function to load all reminders from the database
+       // 1. Function to load all reminders from the database
     async function loadReminders() {
+        // --- ADDED ---
+        // Get the current user first. If no user, stop here.
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            console.log("No user logged in. Can't load reminders.");
+            return;
+        }
+        // -------------
+
         const { data, error } = await supabase
             .from('reminders')
             .select('*')
-            .order('time', { ascending: true }); // Show earliest reminders first
+            // --- ADDED ---
+            // This is the magic filter to only get the current user's reminders
+            .eq('user_id', user.id)
+            // -------------
+            .order('time', { ascending: true });
 
         if (error) {
             console.error("Error loading reminders:", error);
         } else {
             reminders = data;
             renderReminders();
-            // **IMPORTANT**: After loading, schedule alerts for all of them.
+            // IMPORTANT: After loading, schedule alerts for all of them.
             scheduleAllReminders(); 
         }
     }
@@ -40,7 +53,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function addReminder(text, time) {
         if (!text || !time) return;
         
-        const { error } = await supabase.from('reminders').insert([{ text, time }]);
+        // --- ADDED ---
+        // Get the current user to "tag" the new reminder with their ID
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) {
+            alert("You must be logged in to add a reminder.");
+            return;
+        }
+        // -------------
+        
+        // --- MODIFIED ---
+        // We now include the user_id when we insert the new reminder
+        const { error } = await supabase.from('reminders').insert([
+            { text, time, user_id: user.id }
+        ]);
+        // ----------------
         
         if (error) {
             console.error("Error adding reminder:", error);
@@ -49,7 +76,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             await loadReminders(); // Reload all reminders to show the new one
         }
     }
-
     // --- FUNCTIONS ---
     function renderReminders() {
         remindersList.innerHTML = '';
