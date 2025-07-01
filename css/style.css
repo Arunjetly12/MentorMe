@@ -101,3 +101,33 @@ body {
 .bottom-nav .nav-link.active span svg {
     stroke: #007bff; /* Highlight active link icon */
 }
+/* css/style.css */
+
+/* ... all your other styles ... */
+
+/* ==================================== */
+/*   DASHBOARD HEADER STYLES (Corrected) */
+/* ==================================== */
+
+/* Step 1: Make the header a positioning container */
+.dashboard-header {
+    position: relative; /* This is crucial for positioning children inside it */
+    padding: 10px 0;    /* Add some padding so content isn't at the very edge */
+}
+
+/* Step 2: Position the icon button absolutely */
+.account-icon-btn {
+    position: absolute;   /* Unsticks the icon from the normal document flow */
+    top: 10px;            /* Positions it 10px from the top of the header */
+    right: 13px;             /* Positions it 0px from the right of the header */
+    
+    /* Styling for the icon itself */
+    color: #FFCC00;
+    text-decoration: none;
+    padding: 8px;
+}
+
+.account-icon-btn .lucide {
+    width: 30px;
+    height: 30px;
+}
