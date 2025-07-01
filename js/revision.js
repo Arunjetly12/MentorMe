@@ -16,26 +16,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- DATA ---
     let topics = [];
 
-       // --- SUPABASE FUNCTIONS (The Data Engine) ---
+        // --- SUPABASE FUNCTIONS (The Data Engine) ---
 
     // LOAD: Gets all topics for ONLY the logged-in user
     async function loadTopics() {
-        // --- ADDED ---
+        // Get the current user. If no user, stop.
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
             console.log("No user is logged in. Can't load revision topics.");
             topics = []; // Clear local array if no user
-            renderTopics(); // Render the empty state
+            renderTopics(); // Render the empty state to the screen
             return;
         }
-        // -------------
 
         const { data, error } = await supabase
             .from('revision_topics')
             .select('*')
-            // --- ADDED ---
-            .eq('user_id', user.id) // The filter for user-specific data
-            // -------------
+            // This is the magic filter to get only this user's data
+            .eq('user_id', user.id) 
             .order('nextRevisionDate', { ascending: true });
 
         if (error) {
@@ -48,32 +46,31 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // ADD: Inserts a new topic and "tags" it with the user's ID
     async function addTopic(newTopicObject) {
-        // --- ADDED ---
+        // Get the current user to tag the new topic
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
             alert("You must be logged in to add a topic.");
             return;
         }
-        // -------------
 
-        // --- MODIFIED ---
         // Add the user's ID to the object right before saving it
         const topicToInsert = {
             ...newTopicObject,
             user_id: user.id
         };
-        // ----------------
 
         const { error } = await supabase.from('revision_topics').insert([topicToInsert]);
         if (error) {
             console.error("Error adding topic:", error);
             alert("Failed to add topic. Check the console for errors.");
         } else {
+            // Success! Reload all topics to show the new one.
             await loadTopics();
         }
     }
 
     // UPDATE: Finds a topic by its ID and updates it (no changes needed)
+    // The RLS policy will automatically prevent a user from updating another user's topic.
     async function updateTopic(topicId, updatesObject) {
         if (isNaN(topicId)) {
             console.error("Update failed: Invalid Topic ID.");
@@ -88,6 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // DELETE: Finds a topic by its ID and removes it (no changes needed)
+    // The RLS policy also protects this action.
     async function deleteTopic(topicId) {
         if (isNaN(topicId)) {
             console.error("Delete failed: Invalid Topic ID.");
