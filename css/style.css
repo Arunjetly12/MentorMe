@@ -66,7 +66,7 @@ body {
     color: #ffe09d;          /* Sets the default color to a light grey. */
     text-decoration: none; /* Removes the ugly default underline from links. */
     text-align: center;
-    margin: 10px;    /* Centers the text and icon. */
+    margin: 15px;    /* Centers the text and icon. */
 }
 
 /* This targets ONLY the link that ALSO has the "active" class */
