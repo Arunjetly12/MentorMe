@@ -152,3 +152,51 @@ body {
     filter: drop-shadow(0 25px 25px rgba(177, 59, 255, 0.4));
   }
 }
+/* The beautiful, animated, premium PWA install button */
+.install-button {
+  /* Positioning */
+  position: fixed; /* Stays in the same spot even when you scroll */
+  top: 20px;
+  right: 20px;
+  z-index: 1000; /* Stays on top of other content */
+  
+  /* Hiding by default - JS will show it */
+  display: none;
+
+  /* The Look */
+  border: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  
+  /* Your Awesome Gradient & Animation */
+  background-image: linear-gradient(19deg, rgba(0, 63, 235, 1) 0%, rgba(134, 29, 253, 1) 47%, rgba(242, 0, 36, 1) 100%);
+  background-size: 200% auto; /* Make the background twice as wide */
+  transition: all 0.3s ease-in-out;
+  
+  /* The animation that moves the gradient */
+  animation: gradient-animation 4s ease infinite;
+}
+
+/* The hover effect to make it feel responsive */
+.install-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* The icon styling */
+.install-button .fa-download {
+  margin-right: 8px;
+}
+
+/* The keyframes for our gradient animation */
+@keyframes gradient-animation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

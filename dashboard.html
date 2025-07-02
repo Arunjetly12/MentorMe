@@ -13,61 +13,63 @@
     <!-- 3. **NEW** The Security Guard Script -->
     <script src="js/guard.js"></script>
     <link rel="stylesheet" href="css/style.css">
+        <script src="js/install.js"></script> 
+
     <link rel="stylesheet" href="css/dashboard.css">
     <!-- In the <head> of every HTML file -->
-<link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-<link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
+    
+    <!-- NEW: Font Awesome for the download icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
 </head>
 <body>
 
+    <!-- NEW: The beautiful, premium PWA install button -->
+    <button id="install-button" class="install-button">
+        <i class="fas fa-download"></i> Install App
+    </button>
+
     <nav class="bottom-nav">
-    <a href="dashboard.html" class="nav-link active">
-        <span data-lucide="home"></span>
-        
-    </a>
-    <a href="tracker.html" class="nav-link">
-        <span data-lucide="bar-chart"></span>
-        
-    </a>
-    <a href="reminders.html" class="nav-link active">
-        <span data-lucide="bell"></span>
-        
-    </a>
-    <a href="motivation.html" class="nav-link active">
-        <span data-lucide="activity"></span>
-        
-    </a>
-    
-    <a href="revision.html" class="nav-link active">
-         <span data-lucide="brain-circuit"></span>
-
-     </a> <!-- Added link -->
-
-     <a href="tools.html" class="nav-link">
-         <span data-lucide="settings"></span>
-          
-     </a>
-     
-</nav>
-
+        <a href="dashboard.html" class="nav-link active">
+            <span data-lucide="home"></span>
+        </a>
+        <a href="tracker.html" class="nav-link">
+            <span data-lucide="bar-chart"></span>
+        </a>
+        <a href="reminders.html" class="nav-link active">
+            <span data-lucide="bell"></span>
+        </a>
+        <a href="motivation.html" class="nav-link active">
+            <span data-lucide="activity"></span>
+        </a>
+        <a href="revision.html" class="nav-link active">
+            <span data-lucide="brain-circuit"></span>
+        </a>
+        <a href="tools.html" class="nav-link">
+            <span data-lucide="settings"></span>
+        </a>
+    </nav>
+           
     <div class="app-container">
         <header class="header">
             <div class="header-top">
                 <h1 id="welcome-greeting">
-    Hi, <span id="user-name">Student</span>! 
-    <span data-lucide="hand"></span>
-</h1>
+                    Hi, <span id="user-name">Student</span>! 
+                    <span data-lucide="hand"></span>
+                </h1>
             </div>
             <p>Ready to conquer your goals today?</p>
             <div class="profile-section">
-        <a href="account.html" class="account-icon-btn">
-            <span data-lucide="user-circle-2"></span>
-        </a>
-    </div>
+                <a href="account.html" class="account-icon-btn">
+                    <span data-lucide="user-circle-2"></span>
+                </a>
+            </div>
         </header>
 
         <div class="card quote-card">
@@ -94,7 +96,8 @@
             </div>
         </div>
     </div>
-
     <script src="js/script.js"></script>
+    <!-- Make sure your PWA install script is also included! -->
+    <!-- e.g., <script src="js/install.js"></script> -->
 </body>
 </html>

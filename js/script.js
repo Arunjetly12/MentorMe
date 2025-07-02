@@ -2,7 +2,19 @@
 // SCRIPT.JS - FINAL SUPABASE VERSION
 // This version is designed to be stable and reliable.
 // =====================================================================
+// Add this to the top of your main JS file (e.g., js/script.js)
 
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        console.log('Service Worker registered successfully:', registration);
+      })
+      .catch((error) => {
+        console.log('Service Worker registration failed:', error);
+      });
+  });
+}
 document.addEventListener("DOMContentLoaded", async () => {
 
     // --- SELECTORS & STATE ---
@@ -301,3 +313,4 @@ addButton.addEventListener('click', handleAddTask);
      lucide.createIcons();
 });
  
+
