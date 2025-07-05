@@ -1,204 +1,242 @@
-document.addEventListener('DOMContentLoaded', () => {
+// --- JS/TRACKER.JS (Final Supabase & Charts Version) ---
 
+// Global function for deleting individual mock tests
+async function deleteMockTest(testId) {
+    if (!confirm("Are you sure you want to delete this mock test result?")) {
+        return;
+    }
+
+    const { error } = await supabase
+        .from('mock_tests')
+        .delete()
+        .eq('id', testId);
+
+    if (error) {
+        console.error("Error deleting mock test:", error);
+        alert("Failed to delete mock test.");
+    } else {
+        // Reload all data and charts by calling the global loadAllData function
+        if (window.loadAllData) {
+            await window.loadAllData();
+        }
+        // Also trigger a page reload as a fallback
+        location.reload();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    
     // --- SELECTORS ---
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const totalStudyTimeEl = document.getElementById('total-study-time');
     const tasksCompletedEl = document.getElementById('tasks-completed');
     const mocksTakenEl = document.getElementById('mocks-taken');
     const avgScoreEl = document.getElementById('avg-score');
     const highestScoreEl = document.getElementById('highest-score');
+    
     const addMockBtn = document.getElementById('add-mock-btn');
+    const resetAllBtn = document.getElementById('reset-all-btn');
     const modal = document.getElementById('add-mock-modal');
     const cancelMockBtn = document.getElementById('cancel-mock-btn');
     const saveMockBtn = document.getElementById('save-mock-btn');
-    const mockDateEl = document.getElementById('mock-date');
+    const mockDateInput = document.getElementById('mock-date');
+    const physicsScoreInput = document.getElementById('physics-score');
+    const chemistryScoreInput = document.getElementById('chemistry-score');
+    const biologyScoreInput = document.getElementById('biology-score');
+    const mockTestListEl = document.getElementById('mock-test-list');
 
-    // Chart contexts
-    const mockTestChartCtx = document.getElementById('mock-test-chart').getContext('2d');
-    const subjectStudyChartCtx = document.getElementById('subject-study-chart').getContext('2d');
-    let mockTestChart, subjectStudyChart; // To hold chart instances
+    // --- CHART SETUP ---
+    const mockTestCtx = document.getElementById('mock-test-chart').getContext('2d');
+    const mockTestChart = new Chart(mockTestCtx, {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: 'Total Score (out of 720)', data: [], borderColor: '#FFCC00', tension: 0.1 }] },
+        options: { scales: { y: { beginAtZero: false, max: 720 } } }
+    });
 
-    let activeFilter = 'weekly';
+    const subjectStudyCtx = document.getElementById('subject-study-chart').getContext('2d');
+    const subjectStudyChart = new Chart(subjectStudyCtx, {
+        type: 'doughnut',
+        data: { labels: ['Physics', 'Chemistry', 'Biology'], datasets: [{ data: [0,0,0], backgroundColor: ['#007bff', '#28a745', '#dc3545'] }] }
+    });
 
-    // --- DATA HANDLING ---
-    // Helper to load data from localStorage
-    const loadData = (key) => JSON.parse(localStorage.getItem(key)) || [];
-    
-    // --- MAIN UPDATE FUNCTION ---
-    function updateDashboard() {
-        // Load the most recent data
-        const allMockTests = loadData('neetMentorMocks');
-        const allTasks = loadData('neetMentorTasks');
+    // --- SUPABASE FUNCTIONS ---
+    async function loadAllData() {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
 
-        // Filter data based on the active filter
-        const filteredMocks = filterDataByDate(allMockTests, activeFilter);
-        const filteredTasks = filterDataByDate(allTasks, activeFilter);
-        
-        // Update each card
-        updateStatsCard(filteredTasks, filteredMocks);
-        updateMockTestCard(filteredMocks);
-        updateStudyHabitsCard(allTasks); // For now, this shows all-time habits
+        // Fetch mock tests for the logged-in user
+        const { data: mockTests, error: mockError } = await supabase
+            .from('mock_tests')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('test_date', { ascending: true });
 
-        // Set the active class on the correct filter button
-        filterButtons.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.filter === activeFilter);
-        });
-    }
-
-    // --- CARD UPDATE FUNCTIONS ---
-    function updateStatsCard(tasks, mocks) {
-        // NOTE: For study time, we need to modify the dashboard.js to save sessions.
-        // For now, it will be 0.
-        totalStudyTimeEl.textContent = '0'; 
-        tasksCompletedEl.textContent = tasks.filter(task => task.completed).length;
-        mocksTakenEl.textContent = mocks.length;
-    }
-
-    function updateMockTestCard(mocks) {
-        if (!mocks.length) {
-            avgScoreEl.textContent = 'N/A';
-            highestScoreEl.textContent = 'N/A';
-            renderMockTestChart([], []); // Render an empty chart
-            return;
+        if (mockError) {
+            console.error("Error fetching mock tests:", mockError);
+        } else {
+            // Once data is loaded, update the cards and charts
+            updateStatsCard(mockTests);
+            renderMockTestChart(mockTests);
+            renderSubjectChart(mockTests);
+            renderMockTestList(mockTests);
         }
-
-        const scores = mocks.map(m => m.total);
-        const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
-        const highest = Math.max(...scores);
         
-        avgScoreEl.textContent = avg;
-        highestScoreEl.textContent = highest;
+        // Fetch completed tasks for the stats card
+        const { data: tasks, error: taskError } = await supabase
+            .from('tasks')
+            .select('id', { count: 'exact' }) // More efficient way to get a count
+            .eq('user_id', user.id)
+            .eq('completed', true);
 
-        // Prepare data for the chart
-        const labels = mocks.map(m => new Date(m.date).toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}));
-        const data = mocks.map(m => m.total);
-        renderMockTestChart(labels, data);
-    }
-
-    function updateStudyHabitsCard(tasks) {
-        // Placeholder - this will get better when dashboard saves study sessions
-        const subjectCounts = tasks.reduce((acc, task) => {
-            const subject = task.text.split(':')[0].trim();
-            if(subject) acc[subject] = (acc[subject] || 0) + 1;
-            return acc;
-        }, {});
-
-        const labels = Object.keys(subjectCounts);
-        const data = Object.values(subjectCounts);
-        renderSubjectPieChart(labels, data);
-    }
-
-
-    // --- CHART RENDERING ---
-    function renderMockTestChart(labels, data) {
-        if (mockTestChart) mockTestChart.destroy(); // Destroy old chart before creating new one
-        mockTestChart = new Chart(mockTestChartCtx, {
-            type: 'line',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Total Score',
-                    data: data,
-                    borderColor: '#FFCC00',
-                    backgroundColor: 'rgba(255, 204, 0, 0.2)',
-                    fill: true,
-                    tension: 0.1
-                }]
-            },
-            options: { scales: { y: { beginAtZero: false, suggestedMin: 300, suggestedMax: 720 } } }
-        });
-    }
-
-    function renderSubjectPieChart(labels, data) {
-        if (subjectStudyChart) subjectStudyChart.destroy();
-        subjectStudyChart = new Chart(subjectStudyChartCtx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Tasks by Subject',
-                    data: data,
-                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0']
-                }]
-            }
-        });
-    }
-
-    // --- HELPER FUNCTIONS ---
-    function filterDataByDate(data, filter) {
-        const now = new Date();
-        const oneDay = 1000 * 60 * 60 * 24;
-
-        return data.filter(item => {
-            const itemDate = new Date(item.date);
-            const diffDays = Math.round((now - itemDate) / oneDay);
-
-            if (filter === 'daily') return diffDays <= 1;
-            if (filter === 'weekly') return diffDays <= 7;
-            if (filter === 'monthly') return diffDays <= 30;
-            return true; // for 'all time' if we add it
-        });
-    }
-
-    // --- MODAL & DATA SAVING LOGIC ---
-    function showModal() {
-        mockDateEl.valueAsDate = new Date(); // Pre-fill today's date
-        modal.classList.add('show');
-    }
-    function hideModal() {
-        modal.classList.remove('show');
-    }
-
-    function saveMockTest() {
-        const date = mockDateEl.value;
-        const physics = parseInt(document.getElementById('physics-score').value, 10);
-        const chemistry = parseInt(document.getElementById('chemistry-score').value, 10);
-        const biology = parseInt(document.getElementById('biology-score').value, 10);
-
-        if (!date || isNaN(physics) || isNaN(chemistry) || isNaN(biology)) {
-            alert('Please fill in all fields with valid numbers.');
-            return;
+        if(!taskError){
+            tasksCompletedEl.textContent = tasks.length;
         }
+    }
+
+    // Make loadAllData globally accessible
+    window.loadAllData = loadAllData;
+
+    async function addMockTest() {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) { alert("You must be logged in."); return; }
 
         const newMock = {
-            date: date,
-            physics: physics,
-            chemistry: chemistry,
-            biology: biology,
-            total: physics + chemistry + biology
+            user_id: user.id,
+            test_date: mockDateInput.value,
+            physics_score: parseInt(physicsScoreInput.value) || 0,
+            chemistry_score: parseInt(chemistryScoreInput.value) || 0,
+            biology_score: parseInt(biologyScoreInput.value) || 0,
         };
 
-        const allMocks = loadData('neetMentorMocks');
-        allMocks.push(newMock);
-        // Sort by date to keep the chart chronological
-        allMocks.sort((a, b) => new Date(a.date) - new Date(b.date));
-        
-        localStorage.setItem('neetMentorMocks', JSON.stringify(allMocks));
-        
-        hideModal();
-        updateDashboard();
+        if(!newMock.test_date){
+            alert("Please select a test date.");
+            return;
+        }
+
+        const { error } = await supabase.from('mock_tests').insert([newMock]);
+        if (error) {
+            console.error("Error saving mock test:", error);
+            alert("Failed to save result.");
+        } else {
+            hideModal();
+            loadAllData(); // Reload all data and charts
+        }
     }
 
-    // --- EVENT LISTENERS ---
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            activeFilter = btn.dataset.filter;
-            updateDashboard();
+    async function resetAllMockTests() {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) { alert("You must be logged in."); return; }
+
+        if (!confirm("Are you sure you want to delete ALL mock test results? This action cannot be undone.")) {
+            return;
+        }
+
+        const { error } = await supabase
+            .from('mock_tests')
+            .delete()
+            .eq('user_id', user.id);
+
+        if (error) {
+            console.error("Error deleting mock tests:", error);
+            alert("Failed to reset scores.");
+        } else {
+            loadAllData(); // Reload all data and charts
+        }
+    }
+
+    // --- RENDER & CALCULATION FUNCTIONS ---
+    function updateStatsCard(mockTests) {
+        mocksTakenEl.textContent = mockTests.length;
+        if (mockTests.length === 0) {
+            avgScoreEl.textContent = 'N/A';
+            highestScoreEl.textContent = 'N/A';
+            return;
+        }
+
+        let totalScoreSum = 0;
+        let highestScore = 0;
+        mockTests.forEach(test => {
+            const total = test.physics_score + test.chemistry_score + test.biology_score;
+            totalScoreSum += total;
+            if (total > highestScore) {
+                highestScore = total;
+            }
         });
-    });
+        
+        const avgScore = Math.round(totalScoreSum / mockTests.length);
+        avgScoreEl.textContent = avgScore;
+        highestScoreEl.textContent = highestScore;
+    }
+
+    function renderMockTestChart(mockTests) {
+        mockTestChart.data.labels = mockTests.map(t => new Date(t.test_date + 'T00:00:00').toLocaleDateString('en-GB', {day:'2-digit', month:'short'}));
+        mockTestChart.data.datasets[0].data = mockTests.map(t => t.physics_score + t.chemistry_score + t.biology_score);
+        mockTestChart.update();
+    }
+    
+    function renderSubjectChart(mockTests) {
+        if (mockTests.length > 0) {
+            const totalPhysics = mockTests.reduce((sum, test) => sum + test.physics_score, 0);
+            const totalChemistry = mockTests.reduce((sum, test) => sum + test.chemistry_score, 0);
+            const totalBiology = mockTests.reduce((sum, test) => sum + test.biology_score, 0);
+            subjectStudyChart.data.datasets[0].data = [totalPhysics, totalChemistry, totalBiology];
+            subjectStudyChart.update();
+        }
+    }
+
+    function renderMockTestList(mockTests) {
+        if (mockTests.length === 0) {
+            mockTestListEl.innerHTML = '<p style="text-align: center; color: rgba(255,255,255,0.6);">No mock tests added yet.</p>';
+            return;
+        }
+
+        mockTestListEl.innerHTML = mockTests.map(test => {
+            const total = test.physics_score + test.chemistry_score + test.biology_score;
+            const date = new Date(test.test_date + 'T00:00:00').toLocaleDateString('en-GB', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric'
+            });
+            
+            return `
+                <div class="mock-test-item">
+                    <div class="mock-test-info">
+                        <div class="mock-test-date">${date}</div>
+                        <div class="mock-test-scores">
+                            P: ${test.physics_score} | C: ${test.chemistry_score} | B: ${test.biology_score}
+                            <span class="mock-test-total">Total: ${total}</span>
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteMockTest(${test.id})">Delete</button>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // --- MODAL & EVENT LISTENERS ---
+    const showModal = () => {
+        mockDateInput.valueAsDate = new Date(); // Pre-fill today's date
+        modal.classList.add('show');
+    }
+    const hideModal = () => {
+        modal.classList.remove('show');
+        addMockBtn.closest('form')?.reset(); // A safer way to reset the form if it exists
+    };
 
     addMockBtn.addEventListener('click', showModal);
+    resetAllBtn.addEventListener('click', resetAllMockTests);
     cancelMockBtn.addEventListener('click', hideModal);
-    saveMockBtn.addEventListener('click', saveMockTest);
-    modal.addEventListener('click', (e) => (e.target === modal) && hideModal());
+    saveMockBtn.addEventListener('click', addMockTest);
+    modal.addEventListener('click', (e) => e.target === modal && hideModal());
     
-    // --- NAV LINK & INITIAL LOAD ---
-    const navLinks = document.querySelectorAll('.nav-link');
-    const currentPage = location.pathname.split("/").pop();
-    navLinks.forEach(link => {
-        if (link.getAttribute("href") === currentPage) link.classList.add("active");
-        else link.classList.remove("active");
-    });
+    // --- INITIAL LOAD & NAV FIX ---
+    loadAllData();
     lucide.createIcons();
-    updateDashboard(); // Initial load
+    
+    const navLinks = document.querySelectorAll('.nav-link');
+    const currentPage = location.pathname.split("/").pop() || "tracker.html";
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute("href") === currentPage) {
+            link.classList.add("active");
+        }
+    });
 });

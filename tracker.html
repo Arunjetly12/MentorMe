@@ -69,7 +69,25 @@
                 <div class="mock-stat-item">Avg Score: <span id="avg-score">--</span></div>
                 <div class="mock-stat-item">Highest Score: <span id="highest-score">--</span></div>
             </div>
-            <button class="btn-primary" id="add-mock-btn">Add Mock Test Result</button>
+            <div class="button-group">
+                <button class="btn-primary" id="add-mock-btn">Add Mock Test Result</button>
+                <button class="btn-danger" id="reset-all-btn">Reset All Scores</button>
+            </div>
+            <!-- Mock Test List with Individual Delete Buttons -->
+            <div id="mock-test-list" class="mock-test-list">
+                <!-- JavaScript will generate individual mock test items like this:
+                <div class="mock-test-item">
+                    <div class="mock-test-info">
+                        <div class="mock-test-date">15 Dec 2024</div>
+                        <div class="mock-test-scores">
+                            P: 120 | C: 130 | B: 300
+                            <span class="mock-test-total">Total: 550</span>
+                        </div>
+                    </div>
+                    <button class="delete-btn" onclick="deleteMockTest(123)">Delete</button>
+                </div>
+                -->
+            </div>
         </div>
 
         <!-- Study Habit Card -->
