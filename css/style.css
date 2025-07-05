@@ -148,3 +148,68 @@ body {
     opacity: 1;
     transform: translateY(0);
 }
+
+/* Add this to css/dashboard.css */
+
+.task-preview-item-live {
+    display: flex;
+    position: relative;
+    padding: 10px 0 20px 0; /* Add more bottom padding for the line */
+}
+
+.timeline-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.timeline-dot {
+    width: 15px;
+    height: 15px;
+    background-color: #FFCC00;
+    border-radius: 50%;
+    border: 3px solid #1A004B; /* Your body background color */
+    z-index: 1;
+}
+
+.timeline-line {
+    width: 3px;
+    flex-grow: 1;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.task-preview-item-live:last-child .timeline-line {
+    display: none; /* Hide the line on the last item */
+}
+
+.task-preview-content {
+    background-color: rgba(0, 0, 0, 0.2);
+    flex-grow: 1;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.task-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.task-preview-text {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.task-preview-duration {
+    font-size: 14px;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 4px 8px;
+    border-radius: 5px;
+}
+
+.task-preview-time {
+    font-size: 14px;
+    color: #FFCC00;
+}

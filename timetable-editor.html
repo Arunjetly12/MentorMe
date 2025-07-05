@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timetable Editor - MentorMe</title>
+
+    <!-- Essential Scripts & Styles -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/timetable-editor.css"> <!-- The new CSS file -->
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- Fonts & Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- A clean header with back and save buttons -->
+        <header class="editor-header">
+            <a href="dashboard.html" class="header-btn back-btn"><i data-lucide="arrow-left"></i></a>
+            <h1 id="editor-title">Create Timetable</h1>
+            <button id="save-timetable-btn" class="header-btn save-btn"><i data-lucide="save"></i></button>
+        </header>
+
+        <div class="card editor-card">
+            <div class="date-selector">
+                <label for="timetable-date">Schedule for:</label>
+                <input type="date" id="timetable-date">
+            </div>
+
+            <!-- The list where users will build their schedule -->
+            <ul id="task-editor-list" class="task-editor-list">
+                <!-- JavaScript will add task items here -->
+            </ul>
+            
+            <button id="add-new-task-btn" class="btn secondary add-task-btn">
+                <i data-lucide="plus"></i> Add New Task
+            </button>
+        </div>
+    </div>
+
+    <!-- The JavaScript for this page -->
+    <script src="js/timetable-editor.js"></script>
+</body>
+</html>

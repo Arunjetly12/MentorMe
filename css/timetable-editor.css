@@ -1,0 +1,121 @@
+/* css/timetable-editor.css */
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    margin-bottom: 10px;
+}
+
+.editor-header h1 {
+    font-size: 22px;
+    margin: 0;
+}
+
+.header-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+}
+.header-btn .lucide {
+    width: 26px;
+    height: 26px;
+}
+
+.editor-card {
+    padding: 20px;
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.date-selector label {
+    font-weight: 600;
+}
+
+.date-selector input[type="date"] {
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+}
+/* Style the calendar icon for dark mode */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+}
+
+.task-editor-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 25px;
+}
+
+.task-editor-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.task-editor-item input {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.task-editor-item .task-text-input {
+    flex-grow: 1; /* Takes up most of the space */
+}
+
+.task-editor-item .task-duration-input {
+    width: 60px; /* Small width for minutes */
+    text-align: center;
+}
+
+.task-editor-item .delete-task-btn {
+    background: none;
+    border: none;
+    color: #e74c3c; /* Red for delete */
+    cursor: pointer;
+    padding: 8px;
+}
+
+.add-task-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border: 1px dashed rgba(255, 255, 255, 0.5);
+    background: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+.add-task-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-style: solid;
+}
+/* Add this to css/timetable-editor.css */
+.sortable-ghost {
+    opacity: 0.4;
+    background: #444;
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template Preview - MentorMe</title>
+
+    <!-- Supabase and Lucide Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/template-editor.css"> <!-- We will create this CSS file next -->
+    <!-- Add this right after your other script tags in the <head> -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <!-- Fonts and Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="httpss://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
+</head>
+<body>
+
+    <div class="app-container">
+        <header class="header">
+            <!-- JavaScript will fill this title -->
+            <h1 id="template-title">Loading Template...</h1>
+            <p id="template-description">Please wait while we fetch the details.</p>
+        </header>
+
+        <div class="card preview-card">
+            <h2>Template Preview</h2>
+            <!-- JavaScript will fill this list with tasks -->
+            <ul id="task-preview-list" class="task-preview-list">
+                <!-- Example of a task item:
+                <li class="task-preview-item">
+                    <span class="task-text">Subject 1 Focus</span>
+                    <span class="task-duration">25 min</span>
+                </li>
+                -->
+            </ul>
+        </div>
+
+        <div class="action-footer">
+            <button id="use-template-btn" class="btn primary disabled">
+                <i data-lucide="check-circle"></i> Use This Template
+            </button>
+            <a href="dashboard.html" class="btn secondary">
+                <i data-lucide="x-circle"></i> Go Back
+            </a>
+        </div>
+    </div>
+
+    <!-- The JavaScript for this page -->
+    <script src="js/template-editor.js"></script>
+</body>
+</html>

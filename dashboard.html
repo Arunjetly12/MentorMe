@@ -3,72 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MentorMe </title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>MentorMe</title>
     
-    <!-- 2. Your file with the URL and Key -->
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-client.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lucide-icons/dist/lucide.min.js"></script>
-
-    <!-- 3. **NEW** The Security Guard Script -->
     <script src="js/guard.js"></script>
-    <link rel="stylesheet" href="css/style.css">
-        <script src="js/install.js"></script> 
+    <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/dashboard.css">
-    <!-- In the <head> of every HTML file -->
+    
+    <!-- Manifest & Fonts -->
     <link rel="manifest" href="/manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
-    <!-- NEW: Font Awesome for the download icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
-    
+    <!-- Icon -->
     <link rel="icon" type="image/png" href="https://res.cloudinary.com/dcm7c486w/image/upload/v1751105942/logo_lym1hj.jpg">
 </head>
 <body>
 
-    <!-- NEW: The beautiful, premium PWA install button -->
-    <button id="install-button" class="install-button">
-        <i class="fas fa-download"></i> Install App
-    </button>
-
     <nav class="bottom-nav">
-        <a href="dashboard.html" class="nav-link active">
-            <span data-lucide="home"></span>
-        </a>
-        <a href="tracker.html" class="nav-link">
-            <span data-lucide="bar-chart"></span>
-        </a>
-        <a href="reminders.html" class="nav-link active">
-            <span data-lucide="bell"></span>
-        </a>
-        <a href="motivation.html" class="nav-link active">
-            <span data-lucide="activity"></span>
-        </a>
-        <a href="revision.html" class="nav-link active">
-            <span data-lucide="brain-circuit"></span>
-        </a>
-        <a href="tools.html" class="nav-link">
-            <span data-lucide="settings"></span>
-        </a>
+        <a href="dashboard.html" class="nav-link active"><span data-lucide="home"></span></a>
+        <a href="tracker.html" class="nav-link"><span data-lucide="bar-chart"></span></a>
+        <a href="reminders.html" class="nav-link"><span data-lucide="bell"></span></a>
+        <a href="motivation.html" class="nav-link"><span data-lucide="activity"></span></a>
+        <a href="revision.html" class="nav-link"><span data-lucide="brain-circuit"></span></a>
+        <a href="tools.html" class="nav-link"><span data-lucide="settings"></span></a>
     </nav>
            
     <div class="app-container">
         <header class="header">
             <div class="header-top">
-                <h1 id="welcome-greeting">
-                    Hi, <span id="user-name">Student</span>! 
-                    <span data-lucide="hand"></span>
-                </h1>
+                <h1 id="welcome-greeting">Hi, <span id="user-name">Student</span>! <span data-lucide="hand"></span></h1>
             </div>
             <p>Ready to conquer your goals today?</p>
             <div class="profile-section">
-                <a href="account.html" class="account-icon-btn">
-                    <span data-lucide="user-circle-2"></span>
-                </a>
+                <a href="account.html" class="account-icon-btn"><span data-lucide="user-circle-2"></span></a>
             </div>
         </header>
 
@@ -77,15 +51,69 @@
             <p>"The best way to predict the future is to create it."</p>
         </div>
 
+        <!-- CONTAINER 1: Quick Tasks (for FAB button only) -->
         <div class="card timetable-card">
-            <h2>Today's Timetable</h2>
-            <!-- JavaScript will fill this list with tasks, timers, and buttons -->
-            <ul class="task-list"></ul>
+            <h2>Quick Tasks</h2>
+            <!-- This list is ONLY for your FAB button's single tasks -->
+            <ul id="quick-task-list" class="task-list"></ul>
+        </div>
+
+        <!-- CONTAINER 2: The NEW beautiful timetable preview (THIS IS THE MAIN ONE) -->
+        <div class="card timetable-card-white">
+            <div class="card-header">
+                <h2 id="timetable-card-title">Today's Schedule</h2>
+                <a href="#" id="edit-timetable-btn" class="edit-btn" style="display: none;">
+                    <i data-lucide="pencil"></i> Edit
+                </a>
+            </div>
+            <div class="table-container">
+                <table id="timetable-preview-table">
+                    <thead>
+                        <tr>
+                            <th>Subject/Chapter</th>
+                            <th>Time</th>
+                            <th>Duration</th>
+                        </tr>
+                    </thead>
+                    <!-- NEW JavaScript will ONLY write to this body -->
+                    <tbody id="timetable-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Action Hub for Creating Timetables -->
+        <div class="card templates-card">
+            <h2>🚀 Plan Your Day</h2>
+            
+            <!-- Create New Timetable Button -->
+            <a href="timetable-editor.html" class="template-option create-new-option">
+                <div class="template-icon">
+                    <i data-lucide="plus-circle"></i>
+                </div>
+                <div class="template-details">
+                    <h3>Create Blank Timetable</h3>
+                    <p>Start from scratch and build your perfect day.</p>
+                </div>
+                <div class="template-arrow">
+                    <i data-lucide="chevron-right"></i>
+                </div>
+            </a>
+            
+            <!-- Professional Separator -->
+            <div class="separator-text"><span>OR USE A TEMPLATE</span></div>
+
+            <div id="template-list-container">
+                <!-- JavaScript will fill this with templates from Supabase -->
+                <p class="loading-text">Loading templates...</p>
+            </div>
         </div>
     </div>
-
+     
+    <!-- FAB button for adding single tasks -->
     <button class="fab">+</button>
 
+    <!-- Modal for adding single tasks -->
     <div id="add-task-modal" class="modal-overlay">
         <div class="modal-content">
             <h2>Add a New Task</h2>
@@ -96,8 +124,8 @@
             </div>
         </div>
     </div>
+    
+    <!-- Main script for the dashboard -->
     <script src="js/script.js"></script>
-    <!-- Make sure your PWA install script is also included! -->
-    <!-- e.g., <script src="js/install.js"></script> -->
 </body>
 </html>

@@ -1,316 +1,320 @@
 // =====================================================================
-// SCRIPT.JS - FINAL SUPABASE VERSION
-// This version is designed to be stable and reliable.
+// FINAL SUPABASE VERSION with Timetable Integration - FIXED
 // =====================================================================
-// Add this to the top of your main JS file (e.g., js/script.js)
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
-      .then((registration) => {
-        console.log('Service Worker registered successfully:', registration);
-      })
-      .catch((error) => {
-        console.log('Service Worker registration failed:', error);
-      });
+      .then(reg => console.log('Service Worker registered:', reg))
+      .catch(err => console.error('Service Worker failed:', err));
   });
 }
+
 document.addEventListener("DOMContentLoaded", async () => {
+  // --- SELECTORS ---
+  const taskList = document.querySelector('.task-list');
+  const addTaskButton = document.querySelector('.fab');
+  const modal = document.querySelector('#add-task-modal');
+  const cancelButton = document.querySelector('#cancel-btn');
+  const addButton = document.querySelector('#add-btn');
+  const taskInput = document.querySelector('#task-input');
+  const welcomeGreeting = document.getElementById('welcome-greeting');
+  const timetableCardTitle = document.querySelector('.timetable-card h2');
+  const templateContainer = document.getElementById('template-list-container');
+  const navLinks = document.querySelectorAll('.nav-link');
 
-    // --- SELECTORS & STATE ---
-    const taskList = document.querySelector('.task-list');
-    const addTaskButton = document.querySelector('.fab');
-    const modal = document.querySelector('#add-task-modal');
-    const cancelButton = document.querySelector('#cancel-btn');
-    const addButton = document.querySelector('#add-btn');
-    const taskInput = document.querySelector('#task-input');
-    const welcomeGreeting = document.getElementById('welcome-greeting');
+  let tasks = [];
+  let timerInterval = null;
+  const completionSound = new Audio('assets/audio 3.mp3');
 
-    let tasks = []; // Start with an empty array. It will be filled from the database.
-    let timerInterval = null;
-    const completionSound = new Audio('assets/audio 3.mp3');
+  // ===============================================
+  // FINAL DASHBOARD TIMETABLE LOADER (with Edit)
+  // ===============================================
 
-    // --- SUPABASE FUNCTIONS (The New Data Engine) ---
+  // Helper function to get today's date in YYYY-MM-DD format
+  function getTodaysDateString() {
+    return new Date().toISOString().split('T')[0];
+  }
 
-        // 1. Function to load all tasks from the database and greet the user
-    async function loadTasks() {
-        // First, get the current user. This is essential for everything that follows.
-        const { data: { user } } = await supabase.auth.getUser();
-
-        // If no user is logged in, stop the function immediately.
-        if (!user) {
-            console.log("No user logged in. Can't load tasks.");
-            return;
-        }
-
-        // --- NEW GREETING LOGIC ---
-        // Get the h1 element for the greeting.
-        const welcomeGreeting = document.getElementById('welcome-greeting');
-        if (welcomeGreeting) { // Check if the element exists
-            // Try to get the full name from Google metadata first.
-            let displayName = user.user_metadata?.full_name;
-
-            // If there's no full name (e.g., email/password signup), use the email.
-            if (!displayName) {
-                displayName = user.email.split('@')[0]; // Gets the part before the @
-            }
-            
-            // Capitalize the first letter for a nice look.
-            const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-
-            // Update the h1 tag's text content.
-            welcomeGreeting.textContent = `Hi, ${formattedName}! 👋`;
-        }
-        // --- END OF GREETING LOGIC ---
-
-        // Now, fetch only the tasks that belong to this user.
-        const { data, error } = await supabase
-            .from('tasks')
-            .select('*')
-            .eq('user_id', user.id) // The filter for user-specific data
-            .order('created_at', { ascending: true });
-
-        if (error) {
-            console.error("Error loading tasks:", error);
-            return; // Stop if there's a database error
-        }
-
-        // Map the database data to include the temporary UI state properties
-        tasks = data.map(dbTask => ({
-            ...dbTask,
-            isSettingUp: false,
-            isTiming: false,
-            remainingTime: 0,
-        }));
-        
-        renderTasks(); // Render the user's tasks to the screen
-    }
-
-    // 2. Function to add a single task to the database
-    async function addTask(text) {
-        if (!text) return;
-        // --- ADD THESE 3 LINES ---
+  // The new, final function to load and display tasks for today
+  async function loadTodaysTimetable() {
+    // IT LOOKS FOR 'timetable-body', our NEW container's ID!
+    const timetableBody = document.getElementById('timetable-body'); 
+    const timetableCardTitle = document.getElementById('timetable-card-title');
+    const editBtn = document.getElementById('edit-timetable-btn');
+    // It will NOT touch the old '.task-list' container.
+    if (!timetableBody) return; 
+    
+    const todayDateStr = new Date().toISOString().split('T')[0];
     const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-        alert("You must be logged in to add a task.");
-        return; // Stop if no one is logged in
-    }
-        const { error } = await supabase.from('tasks').insert([{ text: text, user_id: user.id }]);
-        
-        if (error) {
-            console.error("Error adding task:", error);
-        } else {
-            await loadTasks(); // Reload all tasks to show the new one
-        }
-    }
-
-    // 3. Function to update a task in the database
-    async function updateTask(id, updates) {
-        const { error } = await supabase
-            .from('tasks')
-            .update(updates)
-            .eq('id', id);
-
-        if (error) {
-            console.error("Error updating task:", error);
-        } else {
-            await loadTasks(); // Reload all tasks to show the change
-        }
+    if (!user) return;
+    
+    const { data: tasks, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('date', todayDateStr)
+        .order('id', { ascending: true });
+    
+    if (error) {
+        console.error("Error fetching tasks:", error);
+        timetableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 20px; color: rgba(255,255,255,0.7);">Could not load tasks.</td></tr>`;
+        return;
     }
     
-    // 4. Function to delete a task from the database (We should add this!)
-    async function deleteTask(id) {
-        const { error } = await supabase
-            .from('tasks')
-            .delete()
-            .eq('id', id);
+    timetableBody.innerHTML = '';
+    
+    if (tasks.length === 0) {
+        timetableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; padding: 20px; color: rgba(255,255,255,0.7);">Nothing scheduled for today!</td></tr>`;
+        editBtn.style.display = 'none';
+    } else {
+        editBtn.style.display = 'flex';
+        editBtn.href = `timetable-editor.html?date=${todayDateStr}`;
+        
+        let cumulativeTime = 0;
+        const startTime = new Date();
+        startTime.setHours(9, 0, 0, 0); // Start at 9 AM
+        
+        tasks.forEach(task => {
+            const taskStartTime = new Date(startTime.getTime() + cumulativeTime * 1000);
+            const timeString = taskStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             
-        if (error) {
-            console.error("Error deleting task:", error);
-        } else {
-            await loadTasks(); // Reload to show the task is gone
-        }
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td style="font-weight: 600; color: #FFCC00;">${task.text}</td>
+                <td style="color: white;">${timeString}</td>
+                <td style="color: white;">${task.duration_minutes} min</td>
+            `;
+            timetableBody.appendChild(row);
+            
+            cumulativeTime += task.duration_minutes * 60; // Add duration in seconds
+        });
     }
+  }
 
-    // --- YOUR ORIGINAL UI AND TIMER FUNCTIONS ---
-   // Add this new function somewhere with your other UI functions
-// In js/script.js
-
-function updateWelcomeMessage(user) {
+  // --- TASK FUNCTIONS (QUICK TASKS ONLY) ---
+  async function loadTasks() {
+    const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
 
-    // **NEW** Select the specific span for the name
-    const userNameElement = document.getElementById('user-name');
-    if (!userNameElement) return; // Safety check
+    let name = user.user_metadata?.full_name || user.email.split('@')[0];
+    name = name.charAt(0).toUpperCase() + name.slice(1);
+    if (welcomeGreeting) welcomeGreeting.textContent = `Hi, ${name}! 👋`;
 
-    let displayName = user.user_metadata?.full_name;
+    // Only load tasks that DON'T have a date (quick tasks only)
+    const { data, error } = await supabase
+      .from('tasks')
+      .select('*')
+      .eq('user_id', user.id)
+      .is('date', null)  // Only tasks without a date (quick tasks)
+      .order('created_at', { ascending: true });
 
-    if (!displayName) {
-        displayName = user.email.split('@')[0];
-    }
+    if (error) return console.error("Error loading tasks:", error);
 
-    const formattedName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+    tasks = data.map(task => ({
+      ...task,
+      isSettingUp: false,
+      isTiming: false,
+      remainingTime: 0
+    }));
 
-    // **CHANGED** We now only update the text of the name span
-    userNameElement.textContent = formattedName;
-}
-    function formatTime(seconds) {
-        const minutes = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
+    renderTasks();
+  }
 
-    function renderTasks() {
-        taskList.innerHTML = '';
-        const isAnyTaskTiming = tasks.some(t => t.isTiming || t.isSettingUp);
+  async function addTask(text) {
+    if (!text) return;
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return alert("Please log in.");
 
-        tasks.forEach((task, index) => {
-            // ... (Your complex render logic here - it doesn't need to change)
-            const listItem = document.createElement('li');
-            listItem.classList.add('task-item');
-            listItem.dataset.index = index;
+    // Add quick task WITHOUT a date field
+    const { error } = await supabase.from('tasks').insert([{ 
+      text, 
+      user_id: user.id,
+      date: null  // Explicitly set to null for quick tasks
+    }]);
+    if (error) console.error("Error adding task:", error);
+    else await loadTasks();
+  }
 
-            if (task.completed) listItem.classList.add('done');
-            if (task.isSettingUp) listItem.classList.add('setting-up');
-            if (task.isTiming) listItem.classList.add('timing');
-            if (isAnyTaskTiming && !task.isTiming && !task.isSettingUp) listItem.style.opacity = '0.4';
+  async function updateTask(id, updates) {
+    const { error } = await supabase.from('tasks').update(updates).eq('id', id);
+    if (error) console.error("Update error:", error);
+    else await loadTasks();
+  }
 
-            listItem.innerHTML = `
-                <div class="task-content">
-                    <span class="task-text">${task.text}</span>
-                    <div class="task-actions">
-                        <div class="task-checkbox" data-action="toggle-complete">
-                            ${task.completed ? '<span data-lucide="check" style="color:white;"></span>' : ''}
-                        </div>
-                        <button class="timer-btn" data-action="setup-timer">
-                            <span data-lucide="play-circle"></span>
-                        </button>
-                         <button class="delete-btn" data-action="delete-task">
-                            <span data-lucide="trash-2"></span>
-                        </button>
-                    </div>
-                </div>
-                <div class="timer-setup-container">
-                    <input type="number" class="time-input" placeholder="25" min="1">
-                    <span class="unit">min</span>
-                    <div class="setup-actions">
-                        <button class="btn" data-action="cancel-setup">Cancel</button>
-                        <button class="btn primary" data-action="start-timer">Start</button>
-                    </div>
-                </div>
-                <div class="timer-countdown-container">
-                    <div class="timer-display">${formatTime(task.remainingTime)}</div>
-                    <div class="timer-controls">
-                        <button class="btn secondary" data-action="stop-timer">Stop</button>
-                    </div>
-                </div>
-            `;
-            taskList.appendChild(listItem);
-        });
-        lucide.createIcons();
-    }
+  async function deleteTask(id) {
+    const { error } = await supabase.from('tasks').delete().eq('id', id);
+    if (error) console.error("Delete error:", error);
+    else await loadTasks();
+  }
 
-    function handleTimerTick() {
-        const activeTaskIndex = tasks.findIndex(t => t.isTiming);
-        if (activeTaskIndex === -1) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            return;
-        }
+  // --- RENDERING & TIMER ---
+  function formatTime(seconds) {
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    return `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+  }
 
-        const task = tasks[activeTaskIndex];
-        task.remainingTime--;
+  function renderTasks() {
+    taskList.innerHTML = '';
+    const isTiming = tasks.some(t => t.isTiming || t.isSettingUp);
 
-        if (task.remainingTime < 0) {
-            clearInterval(timerInterval);
-            timerInterval = null;
-            completionSound.play();
-            updateTask(task.id, { completed: true });
-        } else {
-            renderTasks(); 
-        }
-    }
+    tasks.forEach((task, index) => {
+      const li = document.createElement('li');
+      li.className = `task-item${task.completed ? ' done' : ''}${task.isSettingUp ? ' setting-up' : ''}${task.isTiming ? ' timing' : ''}`;
+      if (isTiming && !task.isTiming && !task.isSettingUp) li.style.opacity = '0.4';
+      li.dataset.index = index;
 
-    // --- EVENT LISTENER ---
-    taskList.addEventListener('click', (event) => {
-        const target = event.target.closest('[data-action]');
-        if (!target) return;
-
-        const action = target.dataset.action;
-        const listItem = target.closest('.task-item');
-        const index = parseInt(listItem.dataset.index, 10);
-        const task = tasks[index];
-
-        switch (action) {
-            case 'toggle-complete':
-                updateTask(task.id, { completed: !task.completed });
-                break;
-            
-            case 'delete-task': // New case for the delete button
-                if (confirm(`Are you sure you want to delete "${task.text}"?`)) {
-                    deleteTask(task.id);
-                }
-                break;
-            
-            // ... (Your other cases: setup-timer, cancel-setup, etc. are fine)
-            case 'setup-timer':
-                if (timerInterval || tasks.some(t => t.isTiming || t.isSettingUp)) {
-                    alert("Another task is already in progress!"); return;
-                }
-                task.isSettingUp = true; renderTasks(); break;
-            case 'cancel-setup':
-                task.isSettingUp = false; renderTasks(); break;
-            case 'start-timer':
-                const minutesInput = listItem.querySelector('.time-input');
-                const minutes = parseInt(minutesInput.value || 25, 10);
-                if (isNaN(minutes) || minutes <= 0) {
-                    alert("Please enter a valid number of minutes."); return;
-                }
-                task.remainingTime = minutes * 60;
-                task.isSettingUp = false;
-                task.isTiming = true;
-                timerInterval = setInterval(handleTimerTick, 1000);
-                renderTasks(); break;
-            case 'stop-timer':
-                clearInterval(timerInterval);
-                timerInterval = null;
-                task.isTiming = false; renderTasks(); break;
-        }
+      li.innerHTML = `
+        <div class="task-content">
+          <span class="task-text">${task.text}</span>
+          <div class="task-actions">
+            <div class="task-checkbox" data-action="toggle-complete">
+              ${task.completed ? '<span data-lucide="check" style="color:white;"></span>' : ''}
+            </div>
+            <button class="timer-btn" data-action="setup-timer"><span data-lucide="play-circle"></span></button>
+            <button class="delete-btn" data-action="delete-task"><span data-lucide="trash-2"></span></button>
+          </div>
+        </div>
+        <div class="timer-setup-container">
+          <input type="number" class="time-input" placeholder="25" min="1">
+          <span class="unit">min</span>
+          <div class="setup-actions">
+            <button class="btn" data-action="cancel-setup">Cancel</button>
+            <button class="btn primary" data-action="start-timer">Start</button>
+          </div>
+        </div>
+        <div class="timer-countdown-container">
+          <div class="timer-display">${formatTime(task.remainingTime)}</div>
+          <div class="timer-controls">
+            <button class="btn secondary" data-action="stop-timer">Stop</button>
+          </div>
+        </div>`;
+      taskList.appendChild(li);
     });
 
-    // --- MODAL LOGIC ---
-    async function handleAddTask() {
-        const text = taskInput.value.trim();
-        if (text) {
-            await addTask(text);
-            taskInput.value = '';
-            hideModal();
-        } else {
-            alert("Please enter a task!");
-        }
+    lucide.createIcons();
+  }
+
+  function handleTimerTick() {
+    const activeIndex = tasks.findIndex(t => t.isTiming);
+    if (activeIndex === -1) return clearInterval(timerInterval);
+
+    const task = tasks[activeIndex];
+    task.remainingTime--;
+    if (task.remainingTime < 0) {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      completionSound.play();
+      updateTask(task.id, { completed: true });
+    } else {
+      renderTasks();
+    }
+  }
+
+  // --- EVENT HANDLERS ---
+  taskList.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+
+    const action = btn.dataset.action;
+    const listItem = btn.closest('.task-item');
+    const index = parseInt(listItem.dataset.index, 10);
+    const task = tasks[index];
+
+    switch (action) {
+      case 'toggle-complete':
+        updateTask(task.id, { completed: !task.completed });
+        break;
+      case 'delete-task':
+        if (confirm(`Delete "${task.text}"?`)) deleteTask(task.id);
+        break;
+      case 'setup-timer':
+        if (timerInterval || tasks.some(t => t.isTiming || t.isSettingUp)) return alert("Another task is active.");
+        task.isSettingUp = true;
+        renderTasks();
+        break;
+      case 'cancel-setup':
+        task.isSettingUp = false;
+        renderTasks();
+        break;
+      case 'start-timer':
+        const input = listItem.querySelector('.time-input');
+        const minutes = parseInt(input.value || '25', 10);
+        if (isNaN(minutes) || minutes <= 0) return alert("Enter valid minutes.");
+        task.remainingTime = minutes * 60;
+        task.isSettingUp = false;
+        task.isTiming = true;
+        timerInterval = setInterval(handleTimerTick, 1000);
+        renderTasks();
+        break;
+      case 'stop-timer':
+        clearInterval(timerInterval);
+        timerInterval = null;
+        task.isTiming = false;
+        renderTasks();
+        break;
+    }
+  });
+
+  // --- MODAL ---
+  function showModal() { modal.classList.add('show'); }
+  function hideModal() { modal.classList.remove('show'); }
+
+  async function handleAddTask() {
+    const text = taskInput.value.trim();
+    if (text) {
+      await addTask(text);
+      taskInput.value = '';
+      hideModal();
+    } else alert("Please enter a task.");
+  }
+
+  addTaskButton.addEventListener('click', showModal);
+  cancelButton.addEventListener('click', hideModal);
+  addButton.addEventListener('click', handleAddTask);
+  modal.addEventListener('click', (e) => e.target === modal && hideModal());
+
+  // --- NAV BAR ACTIVE LINK ---
+  const currentPage = location.pathname.split("/").pop() || "dashboard.html";
+  navLinks.forEach(link => {
+    link.classList.toggle("active", link.getAttribute("href") === currentPage);
+  });
+
+  // --- STUDY TEMPLATE LOADER ---
+  if (templateContainer) await loadStudyTemplates();
+  
+  async function loadStudyTemplates() {
+    const { data: templates, error } = await supabase.from('templates').select('*');
+
+    if (error) {
+      console.error('Template load error:', error.message);
+      return templateContainer.innerHTML = '<p class="error-text">Could not load templates.</p>';
     }
 
-    function showModal() { modal.classList.add('show'); }
-    function hideModal() { modal.classList.remove('show'); }
+    if (!templates.length) {
+      return templateContainer.innerHTML = '<p>No study templates found.</p>';
+    }
 
-    addTaskButton.addEventListener('click', showModal);
-    cancelButton.addEventListener('click', hideModal);
-addButton.addEventListener('click', handleAddTask);
-    modal.addEventListener('click', (e) => e.target === modal && hideModal());
-
-    // --- INITIAL EXECUTION ---
-    await loadTasks();
-
-    // --- BOTTOM NAV FIX ---
-    const navLinks = document.querySelectorAll('.nav-link');
-    const currentPage = location.pathname.split("/").pop() || "dashboard.html";
-    navLinks.forEach(link => {
-        link.classList.remove("active");
-        if (link.getAttribute("href") === currentPage) {
-            link.classList.add("active");
-        }
+    templateContainer.innerHTML = '';
+    templates.forEach(t => {
+      const el = document.createElement('a');
+      el.classList.add('template-option');
+      el.href = `template-editor.html?id=${t.id}`;
+      el.innerHTML = `
+        <div class="template-icon"><i data-lucide="${t.icon_name || 'book-open'}"></i></div>
+        <div class="template-details">
+          <h3>${t.name}</h3>
+          <p>${t.description}</p>
+        </div>
+        <div class="template-arrow"><i data-lucide="chevron-right"></i></div>`;
+      templateContainer.appendChild(el);
     });
-     lucide.createIcons();
+
+    lucide.createIcons();
+  }
+
+  // --- FINAL INIT ---
+  await loadTasks();
+  if (document.getElementById('timetable-body')) await loadTodaysTimetable(); // load only if timetable section exists
 });
- 
-
