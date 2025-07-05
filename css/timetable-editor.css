@@ -63,9 +63,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .task-editor-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     padding: 10px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-wrap: wrap; /* Allow wrapping on small screens */
 }
 
 .task-editor-item input {
@@ -78,12 +79,21 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .task-editor-item .task-text-input {
-    flex-grow: 1; /* Takes up most of the space */
+    flex: 1; /* Take available space but don't grow too much */
+    min-width: 120px; /* Minimum width to prevent too small input */
+    max-width: calc(100% - 140px); /* Leave space for duration and delete button */
 }
 
 .task-editor-item .task-duration-input {
     width: 60px; /* Small width for minutes */
     text-align: center;
+    flex-shrink: 0; /* Don't shrink the duration input */
+}
+
+.task-editor-item .duration-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    flex-shrink: 0; /* Don't shrink the label */
 }
 
 .task-editor-item .delete-task-btn {
@@ -92,6 +102,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     color: #e74c3c; /* Red for delete */
     cursor: pointer;
     padding: 8px;
+    flex-shrink: 0; /* Don't shrink the delete button */
+    min-width: 40px; /* Ensure minimum width for touch targets */
 }
 
 .add-task-btn {
@@ -114,6 +126,33 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     background-color: rgba(255, 255, 255, 0.1);
     border-style: solid;
 }
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+    .task-editor-item {
+        gap: 6px; /* Reduce gap on mobile */
+    }
+    
+    .task-editor-item .task-text-input {
+        max-width: calc(100% - 120px); /* Adjust for smaller screens */
+        min-width: 100px;
+    }
+    
+    .task-editor-item .task-duration-input {
+        width: 50px; /* Slightly smaller on mobile */
+    }
+    
+    .task-editor-item .delete-task-btn {
+        padding: 6px; /* Smaller padding on mobile */
+        min-width: 36px;
+    }
+    
+    .task-editor-item input {
+        padding: 8px; /* Smaller padding on mobile */
+        font-size: 14px;
+    }
+}
+
 /* Add this to css/timetable-editor.css */
 .sortable-ghost {
     opacity: 0.4;
