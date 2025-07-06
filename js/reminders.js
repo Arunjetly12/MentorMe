@@ -1,5 +1,32 @@
 // --- JS/REMINDERS.JS (Supabase Version) ---
 
+// Global function for deleting individual reminders
+async function deleteReminder(reminderId) {
+    if (!reminderId) {
+        console.error("Reminder ID is undefined");
+        return;
+    }
+
+    if (!confirm("Are you sure you want to delete this reminder?")) {
+        return;
+    }
+
+    const { error } = await supabase
+        .from('reminders')
+        .delete()
+        .eq('id', reminderId);
+
+    if (error) {
+        console.error("Error deleting reminder:", error);
+        alert("Failed to delete reminder.");
+    } else {
+        // Reload all reminders
+        if (window.loadReminders) {
+            await window.loadReminders();
+        }
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
 
     // --- SELECTORS ---
@@ -7,6 +34,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const reminderTimeInput = document.querySelector('#reminder-time');
     const setReminderBtn = document.querySelector('#set-reminder-btn');
     const remindersList = document.querySelector('#reminders-list');
+    const reminderCountEl = document.querySelector('#reminder-count');
+    const emptyStateEl = document.querySelector('#empty-state');
     const reminderAlertModal = document.querySelector('#reminder-alert-modal');
     const alertText = document.querySelector('#alert-text');
     const alertOkBtn = document.querySelector('#alert-ok-btn');
@@ -14,29 +43,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     const alarmSound = new Audio('assets/alarm.mp3');
 
     // --- DATA ---
-    // **CHANGED** This will be filled from the database now.
     let reminders = [];
 
-    // --- **NEW** SUPABASE FUNCTIONS ---
+    // --- SUPABASE FUNCTIONS ---
 
-       // 1. Function to load all reminders from the database
+    // 1. Function to load all reminders from the database
     async function loadReminders() {
-        // --- ADDED ---
-        // Get the current user first. If no user, stop here.
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
             console.log("No user logged in. Can't load reminders.");
             return;
         }
-        // -------------
 
         const { data, error } = await supabase
             .from('reminders')
             .select('*')
-            // --- ADDED ---
-            // This is the magic filter to only get the current user's reminders
             .eq('user_id', user.id)
-            // -------------
             .order('time', { ascending: true });
 
         if (error) {
@@ -44,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             reminders = data;
             renderReminders();
-            // IMPORTANT: After loading, schedule alerts for all of them.
+            updateReminderCount();
             scheduleAllReminders(); 
         }
     }
@@ -53,21 +75,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function addReminder(text, time) {
         if (!text || !time) return;
         
-        // --- ADDED ---
-        // Get the current user to "tag" the new reminder with their ID
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) {
             alert("You must be logged in to add a reminder.");
             return;
         }
-        // -------------
         
-        // --- MODIFIED ---
-        // We now include the user_id when we insert the new reminder
         const { error } = await supabase.from('reminders').insert([
             { text, time, user_id: user.id }
         ]);
-        // ----------------
         
         if (error) {
             console.error("Error adding reminder:", error);
@@ -76,22 +92,48 @@ document.addEventListener('DOMContentLoaded', async () => {
             await loadReminders(); // Reload all reminders to show the new one
         }
     }
+
     // --- FUNCTIONS ---
     function renderReminders() {
         remindersList.innerHTML = '';
+        
         if (reminders.length === 0) {
-            remindersList.innerHTML = '<li>No reminders set.</li>';
+            // Show empty state
+            emptyStateEl.style.display = 'block';
+            remindersList.style.display = 'none';
             return;
         }
+
+        // Hide empty state and show list
+        emptyStateEl.style.display = 'none';
+        remindersList.style.display = 'flex';
+
         reminders.forEach(reminder => {
-            const listItem = document.createElement('li');
-            listItem.classList.add('task-item');
-            // We need to format the time, Supabase gives '14:30:00', let's show '14:30'
+            const reminderItem = document.createElement('div');
+            reminderItem.classList.add('reminder-item');
+            
+            // Format the time
             const [hours, minutes] = reminder.time.split(':');
             const formattedTime = `${hours}:${minutes}`;
-            listItem.textContent = `"${reminder.text}" at ${formattedTime}`;
-            remindersList.appendChild(listItem);
+            
+            // Use the new id column
+            const reminderId = reminder.id;
+            
+            reminderItem.innerHTML = `
+                <div class="reminder-info">
+                    <div class="reminder-text">${reminder.text}</div>
+                    <div class="reminder-time">${formattedTime}</div>
+                </div>
+                <button class="delete-btn" onclick="deleteReminder('${reminderId}')">Delete</button>
+            `;
+            
+            remindersList.appendChild(reminderItem);
         });
+    }
+
+    function updateReminderCount() {
+        const count = reminders.length;
+        reminderCountEl.textContent = `${count} reminder${count !== 1 ? 's' : ''}`;
     }
 
     // This function will schedule a pop-up for a single reminder
@@ -103,27 +145,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         reminderTime.setHours(hours, minutes, 0);
 
         // If the time has already passed for today, don't schedule it.
-        // A more advanced version could schedule for tomorrow, but this is safer.
         if (reminderTime < now) {
-            console.log(`Skipping past reminder for ${time}`);
             return;
         }
 
         const timeToWait = reminderTime.getTime() - now.getTime();
-        
-        console.log(`Scheduling alert for "${text}" in ${timeToWait / 1000} seconds.`);
 
         setTimeout(() => {
-            console.log(`Firing reminder: "${text}"`);
             alertText.textContent = text;
             reminderAlertModal.classList.add('show');
             alarmSound.play();
         }, timeToWait);
     }
     
-    // **NEW** This function loops through all loaded reminders and schedules them.
+    // This function loops through all loaded reminders and schedules them.
     function scheduleAllReminders() {
-        console.log("Scheduling alerts for all loaded reminders...");
         reminders.forEach(reminder => {
             scheduleAlert(reminder.text, reminder.time);
         });
@@ -139,7 +175,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         
-        // **CHANGED** We now call our Supabase function
         await addReminder(text, time);
         
         // Clear the input fields
@@ -154,13 +189,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // --- INITIAL EXECUTION ---
-    // **CHANGED** Load everything from the database when the page starts.
     await loadReminders();
 
+    // Make loadReminders globally accessible
+    window.loadReminders = loadReminders;
 
     // --- ACTIVE NAV LINK FIX ---
     const navLinks = document.querySelectorAll('.nav-link');
-    const currentPage = location.pathname.split("/").pop() || "reminders.html"; // Default to this page
+    const currentPage = location.pathname.split("/").pop() || "reminders.html";
 
     navLinks.forEach(link => {
         const linkPage = link.getAttribute("href");
