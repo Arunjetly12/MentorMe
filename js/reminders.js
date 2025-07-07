@@ -161,30 +161,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // This function will schedule a pop-up and notification for a single reminder
-    function scheduleAlert(text, time) {
-        const now = new Date();
-        const [hours, minutes] = time.split(':');
-        
-        const reminderTime = new Date();
-        reminderTime.setHours(hours, minutes, 0);
+function scheduleAlert(text, time) {
+    const now = new Date();
+    const [hours, minutes] = time.split(':');
+    
+    const reminderTime = new Date();
+    reminderTime.setHours(hours, minutes, 0);
 
-        // If the time has already passed for today, don't schedule it.
-        if (reminderTime < now) {
-            return;
-        }
-
-        const timeToWait = reminderTime.getTime() - now.getTime();
-
-        setTimeout(() => {
-            // Show modal
-            alertText.textContent = text;
-            reminderAlertModal.classList.add('show');
-            alarmSound.play();
-
-            // Show browser notification
-            showReminderNotification('Reminder', text);
-        }, timeToWait);
+    // If the time has already passed for today, don't schedule it.
+    if (reminderTime < now) {
+        return;
     }
+
+    const timeToWait = reminderTime.getTime() - now.getTime();
+
+    setTimeout(() => {
+        // Only show browser notification with the reminder text
+        showReminderNotification('Reminder', text);
+    }, timeToWait);
+}
     
     // This function loops through all loaded reminders and schedules them.
     function scheduleAllReminders() {
