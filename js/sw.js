@@ -45,3 +45,64 @@ self.addEventListener('fetch', (event) => {
         })
     );
 });
+
+// Listen for push events (for server-sent notifications)
+self.addEventListener('push', function(event) {
+    let data = {};
+    if (event.data) {
+        data = event.data.json();
+    }
+    const title = data.title || "New Notification";
+    const options = {
+        body: data.body || "You have a new notification.",
+        icon: '/assets/icons/icon-192.png',
+        badge: '/assets/icons/icon-192.png',
+        data: data, // Pass all data for use in click handler
+        actions: [
+            {action: 'close', title: 'Close'},
+            {action: 'mute', title: 'Mute'}
+        ]
+    };
+    event.waitUntil(
+        self.registration.showNotification(title, options)
+    );
+});
+
+// Listen for notification click events
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+    if (event.action === 'mute') {
+        // You can implement mute logic here (e.g., set a flag in IndexedDB)
+        // For now, just close the notification
+        return;
+    }
+    // Focus or open the app
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clientList) {
+            for (const client of clientList) {
+                if (client.url === '/' && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            if (clients.openWindow) {
+                return clients.openWindow('/');
+            }
+        })
+    );
+});
+
+// Listen for messages from the main app to show notifications (for local reminders)
+self.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'SHOW_NOTIFICATION') {
+        const { title, body } = event.data;
+        self.registration.showNotification(title, {
+            body: body,
+            icon: '/assets/icons/icon-192.png',
+            badge: '/assets/icons/icon-192.png',
+            actions: [
+                {action: 'close', title: 'Close'},
+                {action: 'mute', title: 'Mute'}
+            ]
+        });
+    }
+});

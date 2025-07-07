@@ -273,8 +273,12 @@
     background-color: #ffe082;
     color: #222;
 }
+/* In css/style.css - Add this at the bottom */
+
+
 
 /* NAV BAR STYLES (unchanged, but included for completeness) */
 .bottom-nav .nav-link span { display: flex; justify-content: center; align-items: center; height: 24px; margin-bottom: 4px; }
 .bottom-nav .nav-link span svg { width: 22px; height: 22px; stroke: #d1c5a2; stroke-width: 2; }
 .bottom-nav .nav-link.active span svg { stroke: #007bff; }
+

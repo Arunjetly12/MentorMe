@@ -1,4 +1,4 @@
-// --- JS/REMINDERS.JS (Supabase Version) ---
+// --- JS/REMINDERS.JS (Supabase Version with Notification Support) ---
 
 // Global function for deleting individual reminders
 async function deleteReminder(reminderId) {
@@ -24,6 +24,30 @@ async function deleteReminder(reminderId) {
         if (window.loadReminders) {
             await window.loadReminders();
         }
+    }
+}
+
+// Request notification permission on load
+async function requestNotificationPermission() {
+    if ('Notification' in window && Notification.permission !== 'granted') {
+        try {
+            await Notification.requestPermission();
+        } catch (e) {
+            console.error('Notification permission error:', e);
+        }
+    }
+}
+
+// Helper to send notification via service worker
+function showReminderNotification(title, body) {
+    if ('serviceWorker' in navigator && 'Notification' in window && Notification.permission === 'granted') {
+        navigator.serviceWorker.ready.then(function(registration) {
+            registration.active.postMessage({
+                type: 'SHOW_NOTIFICATION',
+                title: title,
+                body: body
+            });
+        });
     }
 }
 
@@ -136,7 +160,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         reminderCountEl.textContent = `${count} reminder${count !== 1 ? 's' : ''}`;
     }
 
-    // This function will schedule a pop-up for a single reminder
+    // This function will schedule a pop-up and notification for a single reminder
     function scheduleAlert(text, time) {
         const now = new Date();
         const [hours, minutes] = time.split(':');
@@ -152,9 +176,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         const timeToWait = reminderTime.getTime() - now.getTime();
 
         setTimeout(() => {
+            // Show modal
             alertText.textContent = text;
             reminderAlertModal.classList.add('show');
             alarmSound.play();
+
+            // Show browser notification
+            showReminderNotification('Reminder', text);
         }, timeToWait);
     }
     
@@ -189,6 +217,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     // --- INITIAL EXECUTION ---
+    await requestNotificationPermission();
     await loadReminders();
 
     // Make loadReminders globally accessible
