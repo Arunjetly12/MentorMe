@@ -160,7 +160,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         reminderCountEl.textContent = `${count} reminder${count !== 1 ? 's' : ''}`;
     }
 
-    // This function will schedule a pop-up and notification for a single reminder
 function scheduleAlert(text, time) {
     const now = new Date();
     const [hours, minutes] = time.split(':');
@@ -176,7 +175,12 @@ function scheduleAlert(text, time) {
     const timeToWait = reminderTime.getTime() - now.getTime();
 
     setTimeout(() => {
-        // Only show browser notification with the reminder text
+        // Show your modal/alert and play music
+        alertText.textContent = text;
+        reminderAlertModal.classList.add('show');
+        alarmSound.play();
+
+        // Also show browser notification with the reminder text
         showReminderNotification('Reminder', text);
     }, timeToWait);
 }
