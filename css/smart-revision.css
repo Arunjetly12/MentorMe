@@ -1,0 +1,311 @@
+/* ======================== */
+/*   SMART REVISION PAGE    */
+/* ======================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #090040;
+    color: #f0f0f0;
+    min-height: 100vh;
+}
+
+.app-container {
+    max-width: 340px;
+    margin: 0 auto;
+    padding: 24px 8px 32px 8px;
+}
+
+/* Header */
+.header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #ffe09d;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.header p {
+    font-size: 15px;
+    color: #ffe09d;
+    margin-bottom: 18px;
+    opacity: 0.85;
+}
+
+/* Card styles */
+.card {
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    background: linear-gradient(135deg, #B13BFF 70%, #8400ff 100%);
+    border-radius: 14px;
+    padding: 22px 18px 18px 18px;
+    margin-bottom: 22px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+    position: relative;
+    overflow: hidden;
+}
+
+.card h2 {
+    font-size: 18px;
+    color: #FFCC00;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #ffe09d33;
+    padding-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+}
+
+.card p {
+    color: #fff;
+    font-size: 15px;
+    margin-bottom: 0;
+}
+
+/* Form styles */
+#wrong-question-form label {
+    font-size: 14px;
+    color: #ffffff;
+    font-weight: 500;
+}
+
+#wrong-question-form textarea,
+#wrong-question-form input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 11px;
+    border: 1.5px solid #b783ff;
+    background: linear-gradient(135deg, #2a004f 60%, #000000 100%);
+    color: #ffe9ff;
+    font-size: 15px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    font-family: 'Poppins', sans-serif;
+    resize: vertical;
+    transition: border 0.2s, background 0.2s;
+}
+
+#wrong-question-form textarea:focus,
+#wrong-question-form input[type="text"]:focus {
+    border-color: #FFCC00;
+    outline: none;
+    background: linear-gradient(135deg, #3d006e 60%, #b13bff 100%);
+    color: #fff;
+}
+
+#wrong-question-form input[type="file"] {
+    margin-top: 4px;
+    margin-bottom: 8px;
+    color: #ffe9ff;
+    background: none;
+    border: none;
+}
+
+#wrong-question-form [type="checkbox"] {
+    accent-color: #FFCC00;
+    margin-right: 4px;
+    margin-left: 8px;
+}
+
+#wrong-question-form button[type="submit"] {
+    background: linear-gradient(90deg, #191224 60%, #41127e 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.2s, transform 0.2s;
+    font-family: 'Poppins', sans-serif;
+}
+
+#wrong-question-form button[type="submit"]:hover {
+    background: linear-gradient(90deg, #4e1880 60%, #4e168d 100%);
+    transform: translateY(-2px) scale(1.02);
+}
+
+#wrong-question-form textarea::placeholder,
+#wrong-question-form input[type="text"]::placeholder {
+    color: #e0bfff;
+    opacity: 1;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+}
+
+/* List placeholders */
+#wrong-questions-list p,
+#todays-revisions-list p,
+#progress-timeline-list p,
+#completed-revisions-list p {
+    color: #ffe09d;
+    text-align: center;
+    font-size: 15px;
+    opacity: 0.85;
+}
+
+/* Section lists (for future dynamic content) */
+#wrong-questions-list,
+#todays-revisions-list,
+#progress-timeline-list,
+#completed-revisions-list {
+    min-height: 32px;
+}
+
+/* Progress timeline (example style for future use) */
+.progress-timeline-bar {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0 0 0;
+    align-items: center;
+    justify-content: flex-start;
+}
+.progress-timeline-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #ffe09d;
+    border: 2px solid #FFCC00;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    color: #333;
+}
+.progress-timeline-dot.completed {
+    background: #28a745;
+    color: #fff;
+    border-color: #28a745;
+}
+.progress-timeline-dot.upcoming {
+    background: #fff;
+    color: #b783ff;
+    border-color: #b783ff;
+}
+.progress-timeline-dot.current {
+    background: #FFCC00;
+    color: #fff;
+    border-color: #FFCC00;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .app-container {
+        padding: 12px 2vw 24px 2vw;
+    }
+    .card {
+        padding: 16px 6px 14px 6px;
+    }
+    .header h1 {
+        font-size: 20px;
+    }
+    .card h2 {
+        font-size: 16px;
+    }
+}
+
+/* Lucide icon tweaks */
+[data-lucide] {
+    vertical-align: middle;
+    color: #FFCC00;
+    stroke-width: 2.2;
+    width: 22px;
+    height: 22px;
+}
+
+/* Hide the optional reflection card for now */
+#reflection-card {
+    display: none;
+} 
+
+/* Custom file input styles */
+#wrong-question-form input[type="file"] {
+    display: none;
+}
+.custom-file-label {
+    display: inline-block;
+    background: linear-gradient(90deg, #32204b 60%, #221c02 100%);
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    margin-bottom: 8px;
+    margin-top: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.custom-file-label:hover {
+    background: linear-gradient(90deg, #5f3586 60%, #21093b 100%);
+    transform: translateY(-2px) scale(1.02);
+}
+#file-chosen {
+    color: #ffffff;
+    font-size: 14px;
+    margin-left: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Modern toggle switch styles */
+.toggle-switch {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 16px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+}
+.toggle-switch input[type="checkbox"] {
+    display: none;
+}
+.slider {
+    width: 32px;
+    height: 18px;
+    background: #2a004f;
+    border-radius: 18px;
+    position: relative;
+    transition: background 0.2s;
+    margin-right: 8px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+.slider:before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 14px;
+    height: 14px;
+    background: #ffe9ff;
+    border-radius: 50%;
+    transition: transform 0.2s, background 0.2s;
+}
+.toggle-switch input[type="checkbox"]:checked + .slider {
+    background: linear-gradient(90deg, #b783ff 60%, #070707 100%);
+}
+.toggle-switch input[type="checkbox"]:checked + .slider:before {
+    transform: translateX(14px);
+    background: #ffffff;
+}
+.toggle-label {
+    color: #ffe9ff;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    margin-left: 2px;
+}

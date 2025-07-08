@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Revision Mentor</title>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/smart-revision.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header" style="margin-bottom: 20px;">
+            <h1 style="display: flex; align-items: center; gap: 10px;">
+                <span data-lucide="brain-circuit"></span>
+                Smart Revision Mentor
+            </h1>
+            <p>Track, revise, and master your mistakes using spaced repetition!</p>
+        </header>
+
+        <!-- Add Wrong Question Card -->
+        <div class="card" id="add-wrong-question-card">
+            <h2><span data-lucide="plus-circle"></span> Add Wrong Question</h2>
+            <form id="wrong-question-form">
+                <div style="margin-bottom: 12px;">
+                    <label for="question_text">Question (Text or Image):</label><br>
+                    <textarea id="question_text" name="question_text" rows="2" placeholder="Paste question text here..." style="width:100%; margin-top:4px;"></textarea>
+                    <div style="margin: 8px 0; text-align:center; color:#aaa;">or</div>
+                    <label class="custom-file-label" for="question_image">Choose Image</label>
+                    <input type="file" id="question_image" name="question_image" accept="image/*">
+                    <span id="file-chosen">No file chosen</span>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label for="topic">Topic / Subject:</label><br>
+                    <input type="text" id="topic" name="topic" placeholder="e.g. Physics - Thermodynamics" style="width:100%; margin-top:4px;">
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label for="explanation">Explanation (why you got it wrong):</label><br>
+                    <textarea id="explanation" name="explanation" rows="2" placeholder="e.g. Missed a formula, silly mistake..." style="width:100%; margin-top:4px;"></textarea>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <label>Tags:</label><br>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="tags" value="Silly mistake">
+                        <span class="slider"></span>
+                        <span class="toggle-label">Silly mistake</span>
+                    </label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="tags" value="Concept error">
+                        <span class="slider"></span>
+                        <span class="toggle-label">Concept error</span>
+                    </label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="tags" value="Missed NCERT line">
+                        <span class="slider"></span>
+                        <span class="toggle-label">Missed NCERT line</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn" style="background-color:#b7834c; color:#fff; width:100%;">Add Question</button>
+            </form>
+        </div>
+
+        <!-- Wrong Questions List Card -->
+        <div class="card" id="wrong-questions-list-card">
+            <h2><span data-lucide="list"></span> Wrong Questions</h2>
+            <div id="wrong-questions-list">
+                <!-- JS will render wrong questions here -->
+                <p style="color:#ffe09d; text-align:center;">No wrong questions added yet.</p>
+            </div>
+        </div>
+
+        <!-- Today's Smart Revisions Card -->
+        <div class="card" id="todays-revisions-card">
+            <h2><span data-lucide="calendar-days"></span> Today's Smart Revisions</h2>
+            <div id="todays-revisions-list">
+                <!-- JS will render today's due revisions here -->
+                <p style="color:#ffe09d; text-align:center;">No revisions due today.</p>
+            </div>
+        </div>
+
+        <!-- Progress Timeline Card -->
+        <div class="card" id="progress-timeline-card">
+            <h2><span data-lucide="trending-up"></span> Revision Progress</h2>
+            <div id="progress-timeline-list">
+                <!-- JS will render progress timelines here -->
+                <p style="color:#ffe09d; text-align:center;">No active revision in progress.</p>
+            </div>
+        </div>
+
+        <!-- Completed Revisions Card -->
+        <div class="card" id="completed-revisions-card">
+            <h2><span data-lucide="check-circle"></span> Completed Revisions</h2>
+            <div id="completed-revisions-list">
+                <!-- JS will render mastered questions here -->
+                <p style="color:#ffe09d; text-align:center;">No questions mastered yet.</p>
+            </div>
+        </div>
+
+        <!-- Optional: Reflection/Self-Test Section Placeholders -->
+        <div class="card" id="reflection-card" style="display:none;">
+            <h2><span data-lucide="notebook"></span> Reflection & Self-Test</h2>
+            <div id="reflection-section">
+                <!-- Future upgrade: Reflection and self-test tracker -->
+            </div>
+        </div>
+    </div>
+    <script>
+      lucide.createIcons();
+      // Custom file input logic
+      document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.getElementById('question_image');
+        const fileChosen = document.getElementById('file-chosen');
+        const fileLabel = document.querySelector('.custom-file-label');
+        if (fileInput && fileChosen && fileLabel) {
+          fileLabel.addEventListener('click', () => fileInput.click());
+          fileInput.addEventListener('change', function() {
+            fileChosen.textContent = this.files[0] ? this.files[0].name : 'No file chosen';
+          });
+        }
+      });
+    </script>
+    <script src="js/smart-revision.js"></script>
+</body>
+</html>

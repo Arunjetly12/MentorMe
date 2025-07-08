@@ -353,4 +353,51 @@
     font-style: italic;
 }
 
-// ... existing code ...
+.smart-revision-btn {
+    position: absolute;
+    top: 15px;
+    right: 40px;
+    z-index: 10;
+    left:300px;
+    margin-top: 0.4rem;
+    background: linear-gradient(135deg, #B13BFF 60%, #FFCC00 100%);
+    border: none;
+    border-radius: 50%;
+    width: 70px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(177,59,255,0.18), 0 2px 8px rgba(0,0,0,0.10);
+    transition: background 0.25s, box-shadow 0.25s, transform 0.18s;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 20px;
+    outline: none;
+}
+.smart-revision-btn:hover, .smart-revision-btn:focus {
+    background: linear-gradient(135deg, #FFCC00 60%, #B13BFF 100%);
+    box-shadow: 0 6px 24px 0 #b783ff55, 0 2px 8px rgba(0,0,0,0.13);
+    transform: scale(1.09) rotate(-6deg);
+}
+.smart-revision-btn [data-lucide] {
+    width: 28px;
+    height: 28px;
+    color: #fff;
+    stroke-width: 2.3;
+    transition: color 0.2s;
+}
+@media (max-width: 600px) {
+    .smart-revision-btn {
+        top: 8px;
+        right: 8px;
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+    .smart-revision-btn [data-lucide] {
+        width: 20px;
+        height: 20px;
+    }
+}
