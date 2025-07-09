@@ -17,7 +17,7 @@ body {
 }
 
 .app-container {
-    max-width: 340px;
+    max-width: 480px;
     margin: 0 auto;
     padding: 24px 8px 32px 8px;
 }
@@ -42,7 +42,7 @@ body {
 
 /* Card styles */
 .card {
-    max-width: 300px;
+    max-width: 440px;
     margin-left: auto;
     margin-right: auto;
     background: linear-gradient(135deg, #B13BFF 70%, #8400ff 100%);
@@ -204,9 +204,11 @@ body {
 /* Responsive adjustments */
 @media (max-width: 600px) {
     .app-container {
+        max-width: 98vw;
         padding: 12px 2vw 24px 2vw;
     }
     .card {
+        max-width: 98vw;
         padding: 16px 6px 14px 6px;
     }
     .header h1 {
@@ -425,12 +427,12 @@ body {
 }
 
 .start-btn {
-    background: linear-gradient(90deg, #28a745 60%, #FFCC00 100%);
+    background: linear-gradient(90deg, #6328a7 60%, #731fac 100%);
     color: #222;
 }
 
 .start-btn:hover {
-    background: linear-gradient(90deg, #218838 60%, #e6b800 100%);
+    background: linear-gradient(90deg, #2b0f3d 60%, #3c0d4e 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
 }
