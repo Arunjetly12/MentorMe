@@ -6,6 +6,15 @@ const REVIEW_SCHEDULE = [1, 3, 7, 15, 30];
 
 const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// Audio alarm setup
+const revisionAlarm = new Audio('assets/audio4.mp3');
+
+// Function to play revision alarm
+function playRevisionAlarm() {
+    revisionAlarm.currentTime = 0;
+    revisionAlarm.play();
+}
+
 // ========== UTILITIES ==========
 function getTodayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -77,6 +86,9 @@ document.addEventListener('DOMContentLoaded', async function() {
     return;
   }
 
+  // Check for due revisions and play alarm
+  await checkForDueRevisions();
+
   // Add Wrong Question Form
   document.getElementById('wrong-question-form').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -124,6 +136,45 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   renderAll();
 });
+
+// Check for due revisions and play alarm
+async function checkForDueRevisions() {
+  try {
+    const user = await getUser();
+    if (!user) return;
+    
+    const { data, error } = await supa
+      .from('wrong_questions')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('is_revision_active', true)
+      .eq('mastered', false);
+      
+    if (error) {
+      console.error('Error checking due revisions:', error);
+      return;
+    }
+    
+    const today = getTodayISO();
+    const dueRevisions = data.filter(q => {
+      if (!q.revision_started_on) return false;
+      const daysSince = daysBetween(q.revision_started_on, today);
+      return q.review_schedule.some((d, i) =>
+        daysSince === d && !q.completed_reviews.includes(d)
+      );
+    });
+    
+    // If there are due revisions, play alarm
+    if (dueRevisions.length > 0) {
+      setTimeout(() => {
+        playRevisionAlarm();
+      }, 1000);
+    }
+    
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
 
 // ========== FETCH & RENDER ==========
 async function fetchQuestions() {
@@ -279,6 +330,10 @@ async function renderTodaysRevisions(questions) {
           })
           .eq('id', q.id);
         if (error) alert('Failed to update revision!');
+        
+        // Play alarm when revision is completed
+        playRevisionAlarm();
+        
         btn.parentElement.innerHTML = `<span style="color:#28a745;font-weight:600;">🎉 Day ${day} Review Complete!${mastered ? ' Mastered!' : ''}</span>`;
         setTimeout(renderAll, 1200);
       }
@@ -376,4 +431,4 @@ async function renderCompletedRevisions(questions) {
   lucide.createIcons();
 }
 
-// ========== END ==========
+// ========== END ========== 
