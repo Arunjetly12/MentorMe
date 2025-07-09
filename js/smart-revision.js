@@ -9,10 +9,76 @@ const supa = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 // Audio alarm setup
 const revisionAlarm = new Audio('assets/audio4.mp3');
 
+// Fallback audio (uncomment if local file fails)
+// const revisionAlarm = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.wav');
+
 // Function to play revision alarm
 function playRevisionAlarm() {
     revisionAlarm.currentTime = 0;
     revisionAlarm.play();
+}
+
+// Function to stop revision alarm
+function stopRevisionAlarm() {
+    revisionAlarm.pause();
+    revisionAlarm.currentTime = 0;
+}
+
+// Function to show revision notification popup
+function showRevisionPopup(question, dayNumber) {
+    console.log('showRevisionPopup called with:', question, dayNumber);
+    
+    // Create modal overlay with blur
+    const modalOverlay = document.createElement('div');
+    modalOverlay.className = 'modal-overlay';
+    
+    // Create popup content
+    const popup = document.createElement('div');
+    popup.className = 'revision-popup';
+    
+    popup.innerHTML = `
+        <div class="popup-icon">
+            <span data-lucide="bell"></span>
+        </div>
+        <h2 class="popup-title">🎯 Revision Time!</h2>
+        <div class="popup-content">
+            <h3 class="popup-topic">${question.topic || 'No topic'}</h3>
+            <p class="popup-day">Day ${dayNumber} Review</p>
+            ${question.question_text ? `<p class="popup-question">${question.question_text.substring(0, 100)}${question.question_text.length > 100 ? '...' : ''}</p>` : ''}
+        </div>
+        <div class="popup-buttons">
+            <button onclick="closeRevisionPopup(); stopRevisionAlarm();" class="popup-btn start-btn">
+                Start Revision ✅
+            </button>
+            <button onclick="closeRevisionPopup(); stopRevisionAlarm();" class="popup-btn later-btn">
+                Later
+            </button>
+        </div>
+    `;
+    
+    // Add to page
+    modalOverlay.appendChild(popup);
+    document.body.appendChild(modalOverlay);
+    
+    // Play alarm automatically
+    playRevisionAlarm();
+    
+    console.log('Modal popup added to DOM');
+    lucide.createIcons();
+    
+    // Auto-remove after 30 seconds
+    setTimeout(() => {
+        closeRevisionPopup();
+        stopRevisionAlarm();
+    }, 30000);
+}
+
+// Function to close revision popup
+function closeRevisionPopup() {
+    const modalOverlay = document.querySelector('.modal-overlay');
+    if (modalOverlay) {
+        modalOverlay.remove();
+    }
 }
 
 // ========== UTILITIES ==========
@@ -164,9 +230,18 @@ async function checkForDueRevisions() {
       );
     });
     
-    // If there are due revisions, play alarm
+    // If there are due revisions, show popup and play alarm
     if (dueRevisions.length > 0) {
       setTimeout(() => {
+        // Show popup for the first due revision
+        const firstDue = dueRevisions[0];
+        const today = getTodayISO();
+        const daysSince = daysBetween(firstDue.revision_started_on, today);
+        const currentDay = firstDue.review_schedule.find(d => 
+          daysSince === d && !firstDue.completed_reviews.includes(d)
+        );
+        
+        showRevisionPopup(firstDue, currentDay);
         playRevisionAlarm();
       }, 1000);
     }
