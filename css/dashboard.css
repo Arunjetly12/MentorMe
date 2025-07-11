@@ -36,19 +36,20 @@
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-
 /* --- Task Elements --- */
 .task-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin-bottom: 10px; /* Add some space below the title/actions */
+    margin-bottom: 10px;
 }
+
 .task-text {
     flex-grow: 1;
-    font-size: 18px; /* Slightly larger title */
+    font-size: 18px;
 }
+
 .task-actions {
     display: flex;
     align-items: center;
@@ -58,38 +59,53 @@
 
 /* Custom Checkbox */
 .task-checkbox {
-    width: 22px; height: 22px; border: 2px solid rgba(255, 255, 255, 0.7);
-    border-radius: 5px; cursor: pointer; display: flex; justify-content: center; align-items: center;
+    width: 22px;
+    height: 22px;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .task-item.done .task-checkbox {
-    background-color: #28a745; border-color: #28a745;
+    background-color: #28a745;
+    border-color: #28a745;
 }
 
 /* Timer Play/Pause Button */
 .timer-btn {
-    background: none; border: none; color: #FFCC00; cursor: pointer; padding: 0; display: flex;
+    background: none;
+    border: none;
+    color: #FFCC00;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
 }
+
 .timer-btn .lucide {
-    width: 24px; height: 24px;
+    width: 24px;
+    height: 24px;
 }
 
-
-/* --- NEW: TIMER SETUP VIEW --- */
+/* --- TIMER SETUP VIEW --- */
 .timer-setup-container {
-    display: none; /* Hidden by default */
+    display: none;
     width: 100%;
     padding-top: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     align-items: center;
     gap: 10px;
 }
-.task-item.setting-up .timer-setup-container { display: flex; }
 
-/* --- THE FIX --- */
-/* Hide only the actions, not the whole title content */
+.task-item.setting-up .timer-setup-container {
+    display: flex;
+}
+
 .task-item.setting-up .task-actions,
 .task-item.timing .task-actions {
-    display: none; /* CHANGED */
+    display: none;
 }
 
 .timer-setup-container input {
@@ -102,21 +118,33 @@
     border-radius: 5px;
     text-align: center;
 }
+
 .timer-setup-container .unit {
     color: rgba(255, 255, 255, 0.8);
 }
+
 .timer-setup-container .setup-actions {
     margin-left: auto;
 }
 
 /* Generic button style */
 .btn {
-    background-color: rgba(255, 255, 255, 0.1); color: white; border: none;
-    padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: 600;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
 }
-.btn.primary { background-color: #28a745; }
-.btn.secondary { background-color: #e74c3c; }
 
+.btn.primary {
+    background-color: #28a745;
+}
+
+.btn.secondary {
+    background-color: #e74c3c;
+}
 
 /* --- COUNTDOWN TIMER VIEW --- */
 .timer-countdown-container {
@@ -124,15 +152,182 @@
     width: 100%;
     padding-top: 15px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
-    justify-content: space-between; align-items: center;
+    justify-content: space-between;
+    align-items: center;
 }
-.task-item.timing .timer-countdown-container { display: flex; }
 
-.timer-display { font-size: 24px; font-weight: 600; color: #FFCC00; }
+.task-item.timing .timer-countdown-container {
+    display: flex;
+}
 
+.timer-display {
+    font-size: 24px;
+    font-weight: 600;
+    color: #FFCC00;
+}
 
-/* --- Your original styles for Header, FAB, Modal, Nav (no changes) --- */
-.fab{position:fixed;bottom:80px;right:30px;width:60px;height:60px;background-color:#8400ff;color:white;border:none;border-radius:50%;font-size:30px;box-shadow:0 4px 8px rgba(0,0,0,0.2);cursor:pointer;display:flex;justify-content:center;align-items:center}.header{color:#FFFFFF;padding:10px}.header h1{font-size:24px;margin:0;display:flex;align-items:center;gap:8px}.icon-wrapper{display:flex;width:24px;height:24px;color:#FFCC00}.header p{font-size:16px;margin-top:8px}.card{background-color:#B13BFF;padding:20px;border-radius:10px;margin:15px 0;box-shadow:0 2px 8px rgba(0,0,0,0.2)}.card h2{color:#FFCC00;margin-bottom:10px}.card p{color:#ffffff;font-style:italic}.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s}.modal-overlay.show{opacity:1;visibility:visible}.modal-content{background-color:rgba(50,0,131,.877);padding:25px;border-radius:12px;width:90%;max-width:400px;box-shadow:0 5px 15px rgba(0,0,0,0.2)}.modal-content h2{margin-top:0;margin-bottom:20px;color:#FFCC00}#task-input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:16px;margin-bottom:20px}.modal-actions{display:flex;justify-content:flex-end;gap:10px}.modal-actions button{padding:10px 20px;border:none;border-radius:8px;font-size:16px;cursor:pointer;font-weight:600}#add-btn{background-color:#B13BFF;color:white}#cancel-btn{background-color:#f0f2f5;color:#333}.bottom-nav .nav-link span{display:flex;justify-content:center;align-items:center;height:24px;margin-bottom:4px}.bottom-nav .nav-link span svg{width:22px;height:22px;stroke:#d1c5a2;stroke-width:2}.bottom-nav .nav-link.active span svg{stroke:#007bff}
+/* --- FAB, Modal, Nav, Header Styles --- */
+.fab {
+    position: fixed;
+    bottom: 80px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #8400ff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.header {
+    color: #FFFFFF;
+    padding: 10px;
+    position: relative;
+}
+
+.header h1 {
+    font-size: 24px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-wrapper {
+    display: flex;
+    width: 24px;
+    height: 24px;
+    color: #FFCC00;
+}
+
+.header p {
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+.card {
+    background-color: #B13BFF;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 15px 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.card h2 {
+    color: #FFCC00;
+    margin-bottom: 10px;
+}
+
+.card p {
+    color: #ffffff;
+    font-style: italic;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+    z-index: 9999;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: rgba(50, 0, 131, 0.877);
+    padding: 25px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #FFCC00;
+}
+
+#task-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.modal-actions button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+#add-btn {
+    background-color: #B13BFF;
+    color: white;
+}
+
+#cancel-btn {
+    background-color: #f0f2f5;
+    color: #333;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.bottom-nav .nav-link span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+    margin-bottom: 4px;
+}
+
+.bottom-nav .nav-link span svg {
+    width: 22px;
+    height: 22px;
+    stroke: #d1c5a2;
+    stroke-width: 2;
+}
+
+.bottom-nav .nav-link.active span svg {
+    stroke: #007bff;
+}
 
 /* ======================== */
 /*   STUDY TEMPLATES CARD   */
@@ -182,7 +377,7 @@
 .template-icon .lucide {
     width: 24px;
     height: 24px;
-    color: #FFCC00; /* Matching your theme */
+    color: #FFCC00;
 }
 
 .template-details {
@@ -209,19 +404,18 @@
     height: 20px;
     color: rgba(255, 255, 255, 0.5);
 }
+
 /* ======================== */
 /*   DASHBOARD UI UPGRADES  */
 /* ======================== */
 
-/* Header for the Timetable Card (to align title and edit button) */
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px; /* Adds space before the task list starts */
+    margin-bottom: 10px;
 }
 
-/* Edit Timetable Button */
 .edit-btn {
     background-color: rgba(255, 255, 255, 0.1);
     color: white;
@@ -244,7 +438,6 @@
 /*   PLAN YOUR DAY CARD     */
 /* ======================== */
 
-/* This styles the "Create Blank Timetable" button */
 .create-new-option {
     border: 1px dashed rgba(255, 255, 255, 0.4);
     background-color: rgba(0, 0, 0, 0.3);
@@ -252,10 +445,9 @@
 
 .create-new-option:hover {
     border-style: solid;
-    border-color: #FFCC00; /* Matching your theme's highlight color */
+    border-color: #FFCC00;
 }
 
-/* The separator text "OR USE A TEMPLATE" */
 .separator-text {
     display: flex;
     align-items: center;
@@ -267,7 +459,6 @@
     letter-spacing: 1px;
 }
 
-/* These create the lines on either side of the text */
 .separator-text::before,
 .separator-text::after {
     content: '';
@@ -282,6 +473,7 @@
 .separator-text:not(:empty)::after {
     margin-left: 1em;
 }
+
 /* ======================== */
 /*   TIMETABLE TABLE STYLES */
 /* ======================== */
@@ -327,25 +519,23 @@
     border-bottom: none;
 }
 
-/* Column widths for better layout */
 #timetable-preview-table th:nth-child(1),
 #timetable-preview-table td:nth-child(1) {
-    width: 50%; /* Subject/Chapter gets more space */
+    width: 50%;
 }
 
 #timetable-preview-table th:nth-child(2),
 #timetable-preview-table td:nth-child(2) {
-    width: 25%; /* Time column */
+    width: 25%;
     text-align: center;
 }
 
 #timetable-preview-table th:nth-child(3),
 #timetable-preview-table td:nth-child(3) {
-    width: 25%; /* Duration column */
+    width: 25%;
     text-align: center;
 }
 
-/* Empty state styling */
 #timetable-preview-table tbody tr td[colspan="3"] {
     text-align: center;
     padding: 30px 20px;
@@ -353,51 +543,184 @@
     font-style: italic;
 }
 
+/* ======================== */
+/*   SMART REVISION BUTTON  */
+/*   REPOSITIONED TO LEFT   */
+/* ======================== */
+
 .smart-revision-btn {
-    position: absolute;
-    top: 15px;
-    right: 40px;
-    z-index: 10;
-    left:400px;
-    margin-top: 0.4rem;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
     background: linear-gradient(135deg, #B13BFF 60%, #FFCC00 100%);
     border: none;
     border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    width: 56px;
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #fff;
-    box-shadow: 0 4px 16px rgba(177,59,255,0.18), 0 2px 8px rgba(0,0,0,0.10);
-    transition: background 0.25s, box-shadow 0.25s, transform 0.18s;
+    box-shadow: 0 4px 16px rgba(177, 59, 255, 0.18), 0 2px 8px rgba(0, 0, 0, 0.10);
+    transition: all 0.25s ease;
     cursor: pointer;
     text-decoration: none;
-    font-size: 20px;
+    font-size: 18px;
     outline: none;
 }
-.smart-revision-btn:hover, .smart-revision-btn:focus {
+
+.smart-revision-btn:hover,
+.smart-revision-btn:focus {
     background: linear-gradient(135deg, #FFCC00 60%, #B13BFF 100%);
-    box-shadow: 0 6px 24px 0 #b783ff55, 0 2px 8px rgba(0,0,0,0.13);
-    transform: scale(1.09) rotate(-6deg);
+    box-shadow: 0 6px 24px 0 rgba(183, 131, 255, 0.33), 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: scale(1.08) rotate(-5deg);
 }
+
 .smart-revision-btn [data-lucide] {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     color: #fff;
-    stroke-width: 2.3;
-    transition: color 0.2s;
+    stroke-width: 2.5;
+    transition: all 0.2s;
 }
-@media (max-width: 600px) {
+
+/* ======================== */
+/*   MOBILE OPTIMIZATIONS   */
+/* ======================== */
+
+@media (max-width: 768px) {
+    /* Smart revision button mobile positioning */
     .smart-revision-btn {
-        top: 8px;
-        right: 8px;
-        width: 40px;
-        height: 40px;
+        top: 12px;
+        left: 12px;
+        width: 44px;
+        height: 44px;
         font-size: 16px;
     }
+    
     .smart-revision-btn [data-lucide] {
         width: 20px;
         height: 20px;
+        stroke-width: 2.8;
+    }
+    
+    .smart-revision-btn:hover,
+    .smart-revision-btn:focus {
+        transform: scale(1.05) rotate(-3deg);
+    }
+    
+    /* Adjust header padding to accommodate button */
+    .header {
+        padding: 12px 12px 12px 70px;
+    }
+    
+    /* Improve card spacing on mobile */
+    .card {
+        margin: 12px 8px;
+        padding: 16px;
+    }
+    
+    /* Better modal sizing on mobile */
+    .modal-content {
+        width: 95%;
+        max-width: 380px;
+        padding: 20px;
+        margin: 16px;
+    }
+    
+    /* Improve task item spacing */
+    .task-item {
+        padding: 12px 8px;
+    }
+    
+    .task-text {
+        font-size: 16px;
+    }
+    
+    /* FAB positioning adjustment */
+    .fab {
+        bottom: 90px;
+        right: 16px;
+        width: 52px;
+        height: 52px;
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Extra small screens */
+    .smart-revision-btn {
+        top: 8px;
+        left: 8px;
+        width: 40px;
+        height: 40px;
+    }
+    
+    .smart-revision-btn [data-lucide] {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .header {
+        padding: 10px 8px 10px 60px;
+    }
+    
+    .card {
+        margin: 10px 6px;
+        padding: 14px;
+    }
+}
+
+/* Prevent zoom issues on mobile */
+@media (max-width: 600px) {
+    html {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+    }
+    
+    body {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+    
+    /* Prevent horizontal scroll */
+    body, html {
+        overflow-x: hidden;
+        width: 100%;
+    }
+}
+
+/* ======================== */
+/*   ACCESSIBILITY & UX     */
+/* ======================== */
+
+/* Focus states for better accessibility */
+.smart-revision-btn:focus-visible {
+    outline: 2px solid #FFCC00;
+    outline-offset: 2px;
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    .smart-revision-btn,
+    .template-option,
+    .task-item,
+    .btn {
+        transition: none;
+    }
+    
+    .smart-revision-btn:hover,
+    .smart-revision-btn:focus {
+        transform: none;
     }
 }
