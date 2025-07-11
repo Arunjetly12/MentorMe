@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/supabase-client.js"></script>
     <script src="js/guard.js"></script>
+    <script src="js/badge-manager.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <!-- Stylesheets -->
@@ -87,6 +88,20 @@
         <!-- Action Hub for Creating Timetables -->
         <div class="card templates-card">
             <h2>🚀 Plan Your Day</h2>
+            
+            <!-- Badge Test Link (for development) -->
+            <a href="badge-test.html" class="template-option" style="margin-bottom: 15px; background: linear-gradient(135deg, #ff6b6b, #ee5a24);">
+                <div class="template-icon">
+                    <i data-lucide="test-tube"></i>
+                </div>
+                <div class="template-details">
+                    <h3>Test App Icon Badge</h3>
+                    <p>Test the mobile app-style badge functionality</p>
+                </div>
+                <div class="template-arrow">
+                    <i data-lucide="chevron-right"></i>
+                </div>
+            </a>
             
             <!-- Create New Timetable Button -->
             <a href="timetable-editor.html" class="template-option create-new-option">

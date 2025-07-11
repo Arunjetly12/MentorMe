@@ -133,7 +133,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       date: null  // Explicitly set to null for quick tasks
     }]);
     if (error) console.error("Error adding task:", error);
-    else await loadTasks();
+    else {
+      await loadTasks();
+      // Increment badge for new task
+      if (window.badgeManager) {
+        await window.badgeManager.incrementBadge();
+      }
+    }
   }
 
   async function updateTask(id, updates) {
@@ -207,6 +213,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       timerInterval = null;
       completionSound.play();
       updateTask(task.id, { completed: true });
+      
+      // Increment badge for timer completion
+      if (window.badgeManager) {
+        window.badgeManager.incrementBadge();
+      }
     } else {
       renderTasks();
     }
@@ -225,6 +236,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     switch (action) {
       case 'toggle-complete':
         updateTask(task.id, { completed: !task.completed });
+        // Increment badge for task completion
+        if (window.badgeManager && !task.completed) {
+          window.badgeManager.incrementBadge();
+        }
         break;
       case 'delete-task':
         if (confirm(`Delete "${task.text}"?`)) deleteTask(task.id);
@@ -317,4 +332,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   // --- FINAL INIT ---
   await loadTasks();
   if (document.getElementById('timetable-body')) await loadTodaysTimetable(); // load only if timetable section exists
+  
+  // Clear badge when app is opened (like mobile apps)
+  if (window.badgeManager) {
+    await window.badgeManager.clearBadge();
+  }
+  
+  // Demo function to test badge (you can call this from console)
+  window.testBadge = async () => {
+    if (window.badgeManager) {
+      await window.badgeManager.incrementBadge();
+      console.log('Badge incremented! Current count:', window.badgeManager.getCurrentCount());
+    }
+  };
+  
+  // Demo function to simulate GitHub push notification
+  window.simulateGitHubPush = async () => {
+    if (window.badgeManager) {
+      await window.badgeManager.incrementBadge();
+      console.log('GitHub push simulated! Badge count:', window.badgeManager.getCurrentCount());
+    }
+  };
 });

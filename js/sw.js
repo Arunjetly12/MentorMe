@@ -27,6 +27,26 @@ const URLS_TO_CACHE = [
     '/assets/default-avatar.png'
 ];
 
+// Badge management
+let currentBadgeCount = 0;
+
+// Function to update app icon badge
+async function updateBadge(count) {
+    if ('setAppBadge' in navigator) {
+        try {
+            if (count > 0) {
+                await navigator.setAppBadge(count);
+                currentBadgeCount = count;
+            } else {
+                await navigator.clearAppBadge();
+                currentBadgeCount = 0;
+            }
+        } catch (error) {
+            console.log('Badge API not supported or failed:', error);
+        }
+    }
+}
+
 // Install event: cache the essential files
 self.addEventListener('install', (event) => {
     event.waitUntil(
@@ -104,5 +124,22 @@ self.addEventListener('message', function(event) {
                 {action: 'mute', title: 'Mute'}
             ]
         });
+    }
+    
+    // Handle badge updates
+    if (event.data && event.data.type === 'UPDATE_BADGE') {
+        const { count } = event.data;
+        updateBadge(count);
+    }
+    
+    // Handle badge increment (for new updates)
+    if (event.data && event.data.type === 'INCREMENT_BADGE') {
+        currentBadgeCount++;
+        updateBadge(currentBadgeCount);
+    }
+    
+    // Handle badge clear
+    if (event.data && event.data.type === 'CLEAR_BADGE') {
+        updateBadge(0);
     }
 });
