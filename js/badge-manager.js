@@ -4,7 +4,7 @@
 class BadgeManager {
     constructor() {
         this.currentCount = 0;
-        this.isSupported = 'setAppBadge' in navigator;
+        this.isSupported = this.checkBadgeSupport();
         this.init();
     }
 
@@ -14,16 +14,42 @@ class BadgeManager {
             try {
                 const registration = await navigator.serviceWorker.ready;
                 console.log('Badge manager initialized');
+                
+                // Request notification permission for better badge support
+                if ('Notification' in window && Notification.permission === 'default') {
+                    await Notification.requestPermission();
+                }
             } catch (error) {
                 console.log('Service worker not ready:', error);
             }
         }
     }
 
+    // Check badge support more thoroughly
+    checkBadgeSupport() {
+        // Check for Badge API
+        const hasBadgeAPI = 'setAppBadge' in navigator;
+        
+        // Check for experimental badge API
+        const hasExperimentalBadge = 'setExperimentalAppBadge' in navigator;
+        
+        // Check for notification badge support
+        const hasNotificationBadge = 'Notification' in window;
+        
+        console.log('Badge Support Check:', {
+            badgeAPI: hasBadgeAPI,
+            experimentalBadge: hasExperimentalBadge,
+            notificationBadge: hasNotificationBadge
+        });
+        
+        return hasBadgeAPI || hasExperimentalBadge || hasNotificationBadge;
+    }
+
     // Increment badge count (for new updates)
     async incrementBadge() {
         if (!this.isSupported) {
-            console.log('Badge API not supported');
+            console.log('Badge API not supported, using notification fallback');
+            this.showNotificationBadge();
             return;
         }
 
@@ -42,7 +68,9 @@ class BadgeManager {
     // Set specific badge count
     async setBadge(count) {
         if (!this.isSupported) {
-            console.log('Badge API not supported');
+            console.log('Badge API not supported, using notification fallback');
+            this.currentCount = count;
+            this.showNotificationBadge();
             return;
         }
 
@@ -62,7 +90,8 @@ class BadgeManager {
     // Clear badge
     async clearBadge() {
         if (!this.isSupported) {
-            console.log('Badge API not supported');
+            console.log('Badge API not supported, clearing notification badge');
+            this.currentCount = 0;
             return;
         }
 
@@ -82,14 +111,52 @@ class BadgeManager {
     async updateBadge(count) {
         try {
             if (count > 0) {
-                await navigator.setAppBadge(count);
-                console.log(`Badge updated to: ${count}`);
+                // Try standard Badge API first
+                if ('setAppBadge' in navigator) {
+                    await navigator.setAppBadge(count);
+                    console.log(`Badge updated to: ${count}`);
+                }
+                // Try experimental Badge API
+                else if ('setExperimentalAppBadge' in navigator) {
+                    await navigator.setExperimentalAppBadge(count);
+                    console.log(`Experimental badge updated to: ${count}`);
+                }
+                // Fallback to notification
+                else {
+                    this.showNotificationBadge();
+                }
             } else {
-                await navigator.clearAppBadge();
-                console.log('Badge cleared');
+                if ('clearAppBadge' in navigator) {
+                    await navigator.clearAppBadge();
+                    console.log('Badge cleared');
+                }
+                else if ('clearExperimentalAppBadge' in navigator) {
+                    await navigator.clearExperimentalAppBadge();
+                    console.log('Experimental badge cleared');
+                }
             }
         } catch (error) {
-            console.log('Failed to update badge:', error);
+            console.log('Failed to update badge, using notification fallback:', error);
+            this.showNotificationBadge();
+        }
+    }
+
+    // Fallback method using notifications
+    showNotificationBadge() {
+        if ('Notification' in window && Notification.permission === 'granted') {
+            const notification = new Notification(`MentorMe - ${this.currentCount} updates`, {
+                body: `You have ${this.currentCount} new updates!`,
+                icon: '/assets/icons/icon-192.png',
+                badge: '/assets/icons/icon-192.png',
+                tag: 'mentorme-badge',
+                requireInteraction: false,
+                silent: true
+            });
+            
+            // Auto-close notification after 3 seconds
+            setTimeout(() => {
+                notification.close();
+            }, 3000);
         }
     }
 
@@ -101,6 +168,17 @@ class BadgeManager {
     // Check if badge API is supported
     isBadgeSupported() {
         return this.isSupported;
+    }
+
+    // Get detailed support info
+    getSupportInfo() {
+        return {
+            badgeAPI: 'setAppBadge' in navigator,
+            experimentalBadge: 'setExperimentalAppBadge' in navigator,
+            notificationBadge: 'Notification' in window,
+            notificationPermission: 'Notification' in window ? Notification.permission : 'not-supported',
+            serviceWorker: 'serviceWorker' in navigator
+        };
     }
 }
 

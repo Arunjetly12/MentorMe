@@ -115,7 +115,8 @@
         
         <div class="status" id="status">
             Badge API Status: <span id="api-status">Checking...</span><br>
-            Current Badge Count: <span id="badge-count">0</span>
+            Current Badge Count: <span id="badge-count">0</span><br>
+            <span id="support-details" style="font-size: 12px; color: #888;"></span>
         </div>
     </div>
 
@@ -169,10 +170,20 @@
         function updateStatus() {
             const apiStatus = document.getElementById('api-status');
             const badgeCount = document.getElementById('badge-count');
+            const supportDetails = document.getElementById('support-details');
             
             if (window.badgeManager) {
                 apiStatus.textContent = window.badgeManager.isBadgeSupported() ? 'Supported' : 'Not Supported';
                 badgeCount.textContent = window.badgeManager.getCurrentCount();
+                
+                // Show detailed support info
+                const supportInfo = window.badgeManager.getSupportInfo();
+                supportDetails.innerHTML = `
+                    Badge API: ${supportInfo.badgeAPI ? '✅' : '❌'} | 
+                    Experimental: ${supportInfo.experimentalBadge ? '✅' : '❌'} | 
+                    Notifications: ${supportInfo.notificationBadge ? '✅' : '❌'} | 
+                    Permission: ${supportInfo.notificationPermission}
+                `;
             }
         }
         
