@@ -21,8 +21,8 @@ const URLS_TO_CACHE = [
     '/js/script.js',
     '/js/auth.js',
     '/js/account.js',
-    '/assets/icons/icon-192.png',
-    '/assets/icons/icon-512.png',
+    '/assets/icons/icon-192.png.png',
+    '/assets/icons/icon-512.png.png',
     '/assets/google-icon.svg',
     '/assets/default-avatar.png'
 ];
