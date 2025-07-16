@@ -329,6 +329,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     lucide.createIcons();
   }
 
+  // Smart Revision Mentor Bubble Animation
+  const bubble = document.getElementById('mentorBubble');
+  function showBubble() {
+    bubble.classList.add('show');
+  }
+  function hideBubble() {
+    bubble.classList.remove('show');
+  }
+  function cycleBubble() {
+    showBubble();
+    setTimeout(() => {
+      hideBubble();
+      setTimeout(cycleBubble, 3500);
+    }, 2500);
+  }
+  setTimeout(cycleBubble, 1000);
+
   // --- FINAL INIT ---
   await loadTasks();
   if (document.getElementById('timetable-body')) await loadTodaysTimetable(); // load only if timetable section exists
