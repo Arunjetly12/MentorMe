@@ -336,17 +336,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Clear badge when app is opened (like mobile apps)
   if (window.badgeManager) {
     await window.badgeManager.clearBadge();
-    
-    // Update badge status indicator
-    const badgeStatusText = document.getElementById('badge-status-text');
-    if (badgeStatusText) {
-      const supportInfo = window.badgeManager.getSupportInfo();
-      if (window.badgeManager.isBadgeSupported()) {
-        badgeStatusText.innerHTML = `✅ Badge system active - ${supportInfo.notificationPermission} permission`;
-      } else {
-        badgeStatusText.innerHTML = `⚠️ Badge not supported - Using notifications instead`;
-      }
-    }
+    // Removed badge status indicator update code
   }
   
   // Demo function to test badge (you can call this from console)
