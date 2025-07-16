@@ -793,3 +793,17 @@ html {
         transform: none;
     }
 }
+
+.header {
+  position: relative;
+}
+.account-icon-btn {
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 1000;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+}
