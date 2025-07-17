@@ -278,4 +278,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     addPageTransitionEffects();
 
     lucide.createIcons();
+
+    // --- PRELOADER FUNCTIONALITY ---
+    function hidePreloader() {
+      const preloader = document.getElementById('pagePreloader');
+      if (preloader) {
+        preloader.classList.add('hidden');
+        setTimeout(() => {
+          preloader.remove();
+        }, 500);
+      }
+    }
+    window.addEventListener('load', () => {
+      setTimeout(hidePreloader, 300);
+    });
+    setTimeout(hidePreloader, 2000);
 });

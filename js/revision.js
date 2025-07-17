@@ -244,6 +244,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     // --- INITIAL EXECUTION ---
     await loadTopics();
 
+    // --- PRELOADER FUNCTIONALITY ---
+    function hidePreloader() {
+      const preloader = document.getElementById('pagePreloader');
+      if (preloader) {
+        preloader.classList.add('hidden');
+        setTimeout(() => {
+          preloader.remove();
+        }, 500);
+      }
+    }
+    window.addEventListener('load', () => {
+      setTimeout(hidePreloader, 300);
+    });
+    setTimeout(hidePreloader, 2000);
+
     // --- BOTTOM NAV ---
     // Netlify-compatible navigation active state
     function setActiveNavLink() {

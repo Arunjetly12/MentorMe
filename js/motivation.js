@@ -113,6 +113,21 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize page transitions
     addPageTransitionEffects();
     
+    // --- PRELOADER FUNCTIONALITY ---
+    function hidePreloader() {
+      const preloader = document.getElementById('pagePreloader');
+      if (preloader) {
+        preloader.classList.add('hidden');
+        setTimeout(() => {
+          preloader.remove();
+        }, 500);
+      }
+    }
+    window.addEventListener('load', () => {
+      setTimeout(hidePreloader, 300);
+    });
+    setTimeout(hidePreloader, 2000);
+
     // **FIXED** This now runs safely inside the DOMContentLoaded listener.
     lucide.createIcons();
     console.log("Motivation.js script finished!");
