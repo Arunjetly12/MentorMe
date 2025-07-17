@@ -623,7 +623,7 @@
 .mentor-bubble {
   position: absolute;
   left: 65px;
-  top: 50%;
+  top: 64%;
   transform: translateY(-50%);
   background: linear-gradient(135deg, #b783ff 60%, #6dd5ed 100%);
   color: #222;
