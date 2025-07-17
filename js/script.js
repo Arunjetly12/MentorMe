@@ -291,22 +291,34 @@ document.addEventListener("DOMContentLoaded", async () => {
   modal.addEventListener('click', (e) => e.target === modal && hideModal());
 
   // --- NAV BAR ACTIVE LINK ---
-  // Robust navigation active state that works in all environments
+  // Netlify-compatible navigation active state
   function setActiveNavLink() {
     // First, remove all active classes
     navLinks.forEach(link => link.classList.remove("active"));
     
-    // Get current page name
-    const currentPage = window.location.pathname.split("/").pop() || "dashboard";
+    // Get current page name - handle Netlify's clean URLs
+    const currentPath = window.location.pathname;
+    const currentPage = currentPath.split("/").pop() || "dashboard";
     const currentPageName = currentPage.replace(/\.html$/, "");
+    
+    // Debug logging
+    console.log("Current path:", currentPath);
+    console.log("Current page:", currentPage);
+    console.log("Current page name:", currentPageName);
     
     // Find the matching link and make it active
     navLinks.forEach(link => {
       const href = link.getAttribute("href");
       const linkPageName = href.replace(/\.html$/, "");
       
-      if (linkPageName === currentPageName) {
+      console.log("Link href:", href, "Link page name:", linkPageName);
+      
+      // Check for exact match or dashboard root case
+      if (linkPageName === currentPageName || 
+          (currentPageName === "dashboard" && linkPageName === "dashboard") ||
+          (currentPath === "/" && linkPageName === "dashboard")) {
         link.classList.add("active");
+        console.log("Setting active:", linkPageName);
       }
     });
   }
