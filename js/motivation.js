@@ -88,6 +88,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Set active nav link
     setActiveNavLink();
     
+    // --- SMOOTH PAGE TRANSITIONS ---
+    function addPageTransitionEffects() {
+      // Add transition class to main container
+      const appContainer = document.querySelector('.app-container');
+      if (appContainer) {
+        appContainer.classList.add('page-transition');
+      }
+      
+      // Add loading state to cards during data fetch
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.classList.add('page-loading');
+      });
+      
+      // Remove loading state after a short delay
+      setTimeout(() => {
+        cards.forEach(card => {
+          card.classList.remove('page-loading');
+        });
+      }, 300);
+    }
+    
+    // Initialize page transitions
+    addPageTransitionEffects();
+    
     // **FIXED** This now runs safely inside the DOMContentLoaded listener.
     lucide.createIcons();
     console.log("Motivation.js script finished!");

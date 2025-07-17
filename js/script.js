@@ -318,6 +318,51 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   // Set active nav link
   setActiveNavLink();
+  
+  // --- SMOOTH PAGE TRANSITIONS ---
+  function addPageTransitionEffects() {
+    // Add transition class to main container
+    const appContainer = document.querySelector('.app-container');
+    if (appContainer) {
+      appContainer.classList.add('page-transition');
+    }
+    
+    // Add loading state to cards during data fetch
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+      card.classList.add('page-loading');
+    });
+    
+    // Remove loading state after a short delay (simulating data load)
+    setTimeout(() => {
+      cards.forEach(card => {
+        card.classList.remove('page-loading');
+      });
+    }, 300);
+  }
+  
+  // Initialize page transitions
+  addPageTransitionEffects();
+  
+  // --- PRELOADER FUNCTIONALITY ---
+  function hidePreloader() {
+    const preloader = document.getElementById('pagePreloader');
+    if (preloader) {
+      preloader.classList.add('hidden');
+      // Remove from DOM after animation
+      setTimeout(() => {
+        preloader.remove();
+      }, 500);
+    }
+  }
+  
+  // Hide preloader when page is fully loaded
+  window.addEventListener('load', () => {
+    setTimeout(hidePreloader, 300); // Small delay for smooth transition
+  });
+  
+  // Fallback: hide preloader after 2 seconds max
+  setTimeout(hidePreloader, 2000);
 
   // --- STUDY TEMPLATE LOADER ---
   if (templateContainer) await loadStudyTemplates();
