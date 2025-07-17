@@ -309,7 +309,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Find the matching link and make it active
     navLinks.forEach(link => {
       const href = link.getAttribute("href");
-      const linkPageName = href.replace(/\.html$/, "");
+      // Remove both .html extension and leading slash for clean URLs
+      const linkPageName = href.replace(/\.html$/, "").replace(/^\//, "");
       
       console.log("Link href:", href, "Link page name:", linkPageName);
       
