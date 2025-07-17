@@ -291,21 +291,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   modal.addEventListener('click', (e) => e.target === modal && hideModal());
 
   // --- NAV BAR ACTIVE LINK ---
-  // Handle both local dev (with .html) and deployed (clean URLs) environments
-  const currentPage = window.location.pathname.split("/").pop() || "dashboard";
-  const currentPageName = currentPage.replace(/\.html$/, "");
-
-  navLinks.forEach(link => {
-    const href = link.getAttribute("href");
-    const linkPageName = href.replace(/\.html$/, "");
+  // Robust navigation active state that works in all environments
+  function setActiveNavLink() {
+    // First, remove all active classes
+    navLinks.forEach(link => link.classList.remove("active"));
     
-    // Check multiple possible matches for robust detection
-    const isActive = 
-      linkPageName === currentPageName ||
-      (currentPageName === "dashboard" && linkPageName === "dashboard");
+    // Get current page name
+    const currentPage = window.location.pathname.split("/").pop() || "dashboard";
+    const currentPageName = currentPage.replace(/\.html$/, "");
     
-    link.classList.toggle("active", isActive);
-  });
+    // Find the matching link and make it active
+    navLinks.forEach(link => {
+      const href = link.getAttribute("href");
+      const linkPageName = href.replace(/\.html$/, "");
+      
+      if (linkPageName === currentPageName) {
+        link.classList.add("active");
+      }
+    });
+  }
+  
+  // Set active nav link
+  setActiveNavLink();
 
   // --- STUDY TEMPLATE LOADER ---
   if (templateContainer) await loadStudyTemplates();
