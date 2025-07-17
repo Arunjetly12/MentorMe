@@ -291,15 +291,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   modal.addEventListener('click', (e) => e.target === modal && hideModal());
 
   // --- NAV BAR ACTIVE LINK ---
-  // More robust page detection that works in both dev and production
-  const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
-  const currentPageName = currentPage.replace(/\.html$/, ""); // Remove .html extension if present
+  // Handle both local dev (with .html) and deployed (clean URLs) environments
+  const currentPage = window.location.pathname.split("/").pop() || "dashboard";
+  const currentPageName = currentPage.replace(/\.html$/, "");
 
   navLinks.forEach(link => {
     const href = link.getAttribute("href");
-    const linkPageName = href.replace(/\.html$/, ""); // Remove .html extension if present
-    // Check if this link matches the current page
-    const isActive = linkPageName === currentPageName;
+    const linkPageName = href.replace(/\.html$/, "");
+    
+    // Check multiple possible matches for robust detection
+    const isActive = 
+      linkPageName === currentPageName ||
+      (currentPageName === "dashboard" && linkPageName === "dashboard");
+    
     link.classList.toggle("active", isActive);
   });
 
