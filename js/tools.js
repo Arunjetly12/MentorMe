@@ -151,16 +151,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ===================================
     //      NAV LINK HIGHLIGHT FIX
     // ===================================
-    const navLinks = document.querySelectorAll('.nav-link');
-    const currentPage = location.pathname.split("/").pop() || "tools.html";
-    navLinks.forEach(link => {
-        const linkPage = link.getAttribute("href");
-        if (linkPage === currentPage) {
-            link.classList.add("active");
-        } else {
-            link.classList.remove("active");
+    // Netlify-compatible navigation active state
+    function setActiveNavLink() {
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      // First, remove all active classes
+      navLinks.forEach(link => link.classList.remove("active"));
+      
+      // Get current page name - handle Netlify's clean URLs
+      const currentPath = window.location.pathname;
+      const currentPage = currentPath.split("/").pop() || "tools";
+      const currentPageName = currentPage.replace(/\.html$/, "");
+      
+      // Find the matching link and make it active
+      navLinks.forEach(link => {
+        const href = link.getAttribute("href");
+        // Remove both .html extension and leading slash for clean URLs
+        const linkPageName = href.replace(/\.html$/, "").replace(/^\//, "");
+        
+        // Check for exact match
+        if (linkPageName === currentPageName) {
+          link.classList.add("active");
         }
-    });
+      });
+    }
+    
+    // Set active nav link
+    setActiveNavLink();
 
     lucide.createIcons();
 });

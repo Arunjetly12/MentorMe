@@ -301,27 +301,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     const currentPage = currentPath.split("/").pop() || "dashboard";
     const currentPageName = currentPage.replace(/\.html$/, "");
     
-    // Debug logging
-    console.log("Current path:", currentPath);
-    console.log("Current page:", currentPage);
-    console.log("Current page name:", currentPageName);
-    
-    // Find the matching link and make it active
-    navLinks.forEach(link => {
-      const href = link.getAttribute("href");
-      // Remove both .html extension and leading slash for clean URLs
-      const linkPageName = href.replace(/\.html$/, "").replace(/^\//, "");
-      
-      console.log("Link href:", href, "Link page name:", linkPageName);
-      
-      // Check for exact match or dashboard root case
-      if (linkPageName === currentPageName || 
-          (currentPageName === "dashboard" && linkPageName === "dashboard") ||
-          (currentPath === "/" && linkPageName === "dashboard")) {
-        link.classList.add("active");
-        console.log("Setting active:", linkPageName);
-      }
-    });
+          // Find the matching link and make it active
+      navLinks.forEach(link => {
+        const href = link.getAttribute("href");
+        // Remove both .html extension and leading slash for clean URLs
+        const linkPageName = href.replace(/\.html$/, "").replace(/^\//, "");
+        
+        // Check for exact match or dashboard root case
+        if (linkPageName === currentPageName || 
+            (currentPageName === "dashboard" && linkPageName === "dashboard") ||
+            (currentPath === "/" && linkPageName === "dashboard")) {
+          link.classList.add("active");
+        }
+      });
   }
   
   // Set active nav link

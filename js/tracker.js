@@ -231,12 +231,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadAllData();
     lucide.createIcons();
     
-    const navLinks = document.querySelectorAll('.nav-link');
-    const currentPage = location.pathname.split("/").pop() || "tracker.html";
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute("href") === currentPage) {
-            link.classList.add("active");
+    // Netlify-compatible navigation active state
+    function setActiveNavLink() {
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      // First, remove all active classes
+      navLinks.forEach(link => link.classList.remove("active"));
+      
+      // Get current page name - handle Netlify's clean URLs
+      const currentPath = window.location.pathname;
+      const currentPage = currentPath.split("/").pop() || "tracker";
+      const currentPageName = currentPage.replace(/\.html$/, "");
+      
+      // Find the matching link and make it active
+      navLinks.forEach(link => {
+        const href = link.getAttribute("href");
+        // Remove both .html extension and leading slash for clean URLs
+        const linkPageName = href.replace(/\.html$/, "").replace(/^\//, "");
+        
+        // Check for exact match
+        if (linkPageName === currentPageName) {
+          link.classList.add("active");
         }
-    });
+      });
+    }
+    
+    // Set active nav link
+    setActiveNavLink();
 });
