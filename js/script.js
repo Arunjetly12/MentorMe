@@ -291,9 +291,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   modal.addEventListener('click', (e) => e.target === modal && hideModal());
 
   // --- NAV BAR ACTIVE LINK ---
-  const currentPage = location.pathname.split("/").pop() || "dashboard.html";
+  // More robust page detection that works in both dev and production
+  const currentPage = window.location.pathname.split("/").pop() || "dashboard.html";
+  const currentPageName = currentPage.replace(/\.html$/, ""); // Remove .html extension if present
+
   navLinks.forEach(link => {
-    link.classList.toggle("active", link.getAttribute("href") === currentPage);
+    const href = link.getAttribute("href");
+    const linkPageName = href.replace(/\.html$/, ""); // Remove .html extension if present
+    // Check if this link matches the current page
+    const isActive = linkPageName === currentPageName;
+    link.classList.toggle("active", isActive);
   });
 
   // --- STUDY TEMPLATE LOADER ---
